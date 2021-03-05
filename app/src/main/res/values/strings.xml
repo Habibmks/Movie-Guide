@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Movie Guide</string>
+    <string name="log_inbtn">Sign in</string>
+    <string name="toregisactbtn">Sign Up</string>
+    <string name="Registerbtn">Register</string>
+    <string name="registologbtn">Back to Login</string>
+    <string name="emailTv">Email</string>
+    <string name="passwordTv">Password</string>
+</resources>
