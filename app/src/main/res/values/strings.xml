@@ -6,4 +6,10 @@
     <string name="registologbtn">Back to Login</string>
     <string name="emailTv">Email</string>
     <string name="passwordTv">Password</string>
+    <string name="repasswordtv">Password Again</string>
+    <string name="Registertv">Create an Account</string>
+    <string name="usernametv">Username</string>
+    <string name="nametv">Name</string>
+    <string name="surnametv">Surname</string>
+    <string name="registerbtn">Register</string>
 </resources>
