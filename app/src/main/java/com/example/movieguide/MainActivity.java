@@ -38,10 +38,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,HomeActivity.class));
+            }
+        });
     }
     public void register(){
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final TextView testtv = (TextView) findViewById(R.id.WellcomeTv) ;
 
     }
+
 }
