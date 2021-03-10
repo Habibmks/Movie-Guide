@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         final Button toregbtn = (Button) findViewById(R.id.logtoregbtn);
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final EditText logpass = (EditText) findViewById(R.id.editTextTextPassword);
+        final TextView tverror = (TextView) findViewById(R.id.textView2);
         toregbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                login(tverror);
             }
         });
     }
@@ -50,5 +53,16 @@ public class MainActivity extends AppCompatActivity {
         final TextView testtv = (TextView) findViewById(R.id.WellcomeTv) ;
 
     }
+    public void login(TextView tv){
+        final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
+        final EditText logpassw = (EditText) findViewById(R.id.editTextTextPassword);
 
+        String email = logemail.getText().toString(), password = logpassw.getText().toString();
+
+        if (email.equals("admin") && password.equals("admin")){
+            Intent intent = new Intent(this,HomeActivity.class);
+            intent.putExtra("email",email);
+            startActivity(intent);
+        }else tv.setText("Username or Password is wrong");
+    }
 }
