@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,30 +25,42 @@ import org.json.JSONObject;
 public class HomeActivity extends AppCompatActivity {
     TextView tv;
     Button apibtn;
-    String cityinfo,str;
+    EditText page,name;
+    String str;
     String temp="";
+    RequestQueue queue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         tv = findViewById(R.id.tvapi); apibtn = findViewById(R.id.buttonapi);
-
+        page = findViewById(R.id.etidpage); name = findViewById(R.id.etidname);
+        tv.setText("");
         Intent intent = getIntent();
         if(intent.hasExtra("user_email")){
             str = intent.getStringExtra("user_email").toString();
         }else {
             str = "Misafir";
         }
+        queue = Volley.newRequestQueue(this);
+
 
         apibtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    // Instantiate the RequestQueue.
-                    RequestQueue queue = Volley.newRequestQueue(HomeActivity.this);
-                    //String url ="https://www.metaweather.com/api/location/search/?query=london";
-
-                    String url ="https://api.themoviedb.org/3/search/movie?api_key=5852ecb0b3ac54ac9867feffa62a3b3d&query=fight";
-                    /*JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url ,null ,  new Response.Listener<JSONArray>() {
+                String url ="https://api.themoviedb.org/3/search/movie?api_key=5852ecb0b3ac54ac9867feffa62a3b3d";
+                String apiquery = "&query=";
+                String apipage="&page=";
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(HomeActivity.this);
+                //String url ="https://www.metaweather.com/api/location/search/?query=london";
+                apiquery +=name.getText().toString();apipage +=page.getText().toString();
+                if(apiquery.equals("&query=")) apiquery="&query=fight";
+                if(apipage.equals("&page=")) apipage="&page=1";
+                url += apiquery + apipage;
+                tv.setText("");
+                /*JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url ,null ,  new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
@@ -68,9 +81,17 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONObject movie = new JSONObject(response.toString());
-                            temp = movie.getJSONObject("results").getString("original_title").toString();
-                            tv.setText(temp);
+                            JSONArray array = response.getJSONArray("results");
+                            JSONObject view;
+                            int length = array.length();
+                            String[] name = new String[length];String[] year = new String[length];String[] id = new  String[length];
+
+                            for (int i = 0; i<=length;i++){
+                                view = array.getJSONObject(i);
+                                name[i] = view.getString("original_title");
+                                year[i] = view.getString("release_date");
+                                tv.append("\n Name: "+name[i]+" Year: "+year[i]);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

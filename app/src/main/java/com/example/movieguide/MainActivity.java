@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final EditText logpass = (EditText) findViewById(R.id.editTextTextPassword);
         final TextView tverror = (TextView) findViewById(R.id.textView2);
+        logemail.setText("admin");
+        logpass.setText("admin");
         toregbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
