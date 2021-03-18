@@ -49,76 +49,30 @@ public class HomeActivity extends AppCompatActivity {
         apibtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url ="https://api.themoviedb.org/3/search/movie?api_key=5852ecb0b3ac54ac9867feffa62a3b3d";
-                String apiquery = "&query=";
-                String apipage="&page=";
-                // Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(HomeActivity.this);
-                //String url ="https://www.metaweather.com/api/location/search/?query=london";
-                apiquery +=name.getText().toString();apipage +=page.getText().toString();
-                if(apiquery.equals("&query=")) apiquery="&query=fight";
-                if(apipage.equals("&page=")) apipage="&page=1";
-                url += apiquery + apipage;
-                tv.setText("");
-                /*JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url ,null ,  new Response.Listener<JSONArray>() {
+                apifunc func = new apifunc();
+                /*func.searchMovies(name.getText().toString(), page.getText().toString(), HomeActivity.this, new apifunc.VolleyResponseListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONObject city = response.getJSONObject(0);
-                            cityinfo = city.getString("title") + "\n" + city.getString("woeid");
-                            tv.setText(cityinfo);
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                    public void onError(String message) {
+                        tv.setText("No Response");
                     }
-                }, new Response.ErrorListener() {
+
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        tv.setText(error.getMessage().toString());
+                    public void onResponse(String rtn) {
+                        tv.setText(rtn);
                     }
                 });*/
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                func.moviesearch(name.getText().toString(), page.getText().toString(), HomeActivity.this, new apifunc.moviesearchlistener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray array = response.getJSONArray("results");
-                            JSONObject view;
-                            int length = array.length();
-                            String[] name = new String[length];String[] year = new String[length];String[] id = new  String[length];
-
-                            for (int i = 0; i<=length;i++){
-                                view = array.getJSONObject(i);
-                                name[i] = view.getString("original_title");
-                                year[i] = view.getString("release_date");
-                                tv.append("\n Name: "+name[i]+" Year: "+year[i]);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onError(String message) {
+                        tv.setText("No Response");
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
 
+                    @Override
+                    public void onResponse(MovieSearchReturn movieSearchReturn) {
+                        tv.setText(movieSearchReturn.overview.toString());
                     }
                 });
-                queue.add(request);
-                    /*
-                    // Request a string response from the provided URL.
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    tv.setText(response);
-
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            tv.setText(error.getMessage().toString() );
-                        }
-                    });
-                    // Add the request to the RequestQueue.*/
+                tv.setText("");
             }
         });
     }
