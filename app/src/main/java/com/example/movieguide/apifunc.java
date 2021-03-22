@@ -24,6 +24,7 @@ import java.util.List;
 public class apifunc {
     String api = "";
     String rtn="";
+    private static final String key = "";
 
     public interface VolleyResponseListener{
         void onError(String message);
@@ -33,7 +34,8 @@ public class apifunc {
     public void searchMovies(String query, String page, Context context,VolleyResponseListener listener){
         //request before add singleton
         //RequestQueue queue = Volley.newRequestQueue(context);
-        String url ="https://api.themoviedb.org/3/search/movie?api_key=5852ecb0b3ac54ac9867feffa62a3b3d";
+        String url ="https://api.themoviedb.org/3/search/movie";
+        url += key;
         String apiquery = "&query=";
         String apipage="&page=";
         apiquery +=query;apipage +=page;
@@ -78,13 +80,22 @@ public class apifunc {
 
     public interface moviesearchlistener{
         void onError(String message);
-        void onResponse(MovieSearchReturn movieSearchReturn);
+        void onResponse(List<MovieSearchReturn> movieSearchReturns);
     }
 
-    public void moviesearch(String query, String page, Context context, moviesearchlistener listener){
-        String url="https://api.themoviedb.org/3/search/movie?api_key=5852ecb0b3ac54ac9867feffa62a3b3d&query=fight&page=1";
-        List<MovieSearchReturn> rtn = new ArrayList<>();
 
+    public void moviesearch(String query, String page, Context context, moviesearchlistener listener){
+
+        String url="https://api.themoviedb.org/3/search/movie";
+        url += key;
+        String apiquery = "&query=";
+        String apipage="&page=";
+        apiquery +=query;apipage +=page;
+        if(apiquery.equals("&query=")) apiquery="&query=fight";
+        if(apipage.equals("&page=")) apipage="&page=1";
+        url += apiquery + apipage;
+
+        List<MovieSearchReturn> rtn = new ArrayList<>();
 
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -93,21 +104,15 @@ public class apifunc {
                 try {
                     JSONArray array = response.getJSONArray("results");
 
-                    JSONObject view = (JSONObject) array.get(0);
-                    MovieSearchReturn first = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"));
+                    for (int i=0;i<array.length();i++) {
 
-                    int length = array.length();
-                    String[] name = new String[length];String[] year = new String[length];String[] id = new  String[length];
-                    /*
-                    for (int i = 0; i<=length;i++){
-                        view = array.getJSONObject(i);
-                        name[i] = view.getString("original_title");
-                        year[i] = view.getString("release_date");
-                        tv.append("\n Name: "+name[i]+" Year: "+year[i]);
-                    }*/
-                    view = array.getJSONObject(0);
+                        JSONObject view = (JSONObject) array.get(i);
+                        MovieSearchReturn movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"));
+                        rtn.add(movies);
+                    }
+                    //view = array.getJSONObject(0);
                     //rtn = view.getString("original_title");
-                    listener.onResponse(first);
+                    listener.onResponse(rtn);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     listener.onError(e.getMessage().toString());
@@ -119,6 +124,6 @@ public class apifunc {
 
             }
         });
-        queue.add(request);
+        Singleton.getInstance(context).addToRequestQueue(request);
     }
 }

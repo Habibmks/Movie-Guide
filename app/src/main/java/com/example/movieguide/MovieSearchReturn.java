@@ -3,11 +3,24 @@ package com.example.movieguide;
 public class MovieSearchReturn {
 
 
+    @Override
+    public String toString() {
+        return  "Original Title: " + original_title + '\'' +
+                "\nOverview: " + overview + '\'' +
+                "\nTitle: " + title + '\'' +
+                "\nRelease Date" + releasedate + '\'' +
+                "\nID: " + id
+                ;
+    }
+
     String original_title;
     String overview;
     String title;
     String releasedate;
     int id;
+    public  MovieSearchReturn(){
+
+    }
     public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id) {
         this.original_title = original_title;
         this.overview = overview;

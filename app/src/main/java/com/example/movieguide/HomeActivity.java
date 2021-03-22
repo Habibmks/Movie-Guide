@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -22,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class HomeActivity extends AppCompatActivity {
     TextView tv;
     Button apibtn;
@@ -29,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     String str;
     String temp="";
     RequestQueue queue;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         tv = findViewById(R.id.tvapi); apibtn = findViewById(R.id.buttonapi);
         page = findViewById(R.id.etidpage); name = findViewById(R.id.etidname);
+        lv = findViewById(R.id.home_lv);
         tv.setText("");
         Intent intent = getIntent();
         if(intent.hasExtra("user_email")){
@@ -68,11 +74,14 @@ public class HomeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onResponse(MovieSearchReturn movieSearchReturn) {
-                        tv.setText(movieSearchReturn.overview.toString());
+                    public void onResponse(List<MovieSearchReturn> movieSearchReturns) {
+
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1,movieSearchReturns);
+                        lv.setAdapter(arrayAdapter);
+                        
                     }
                 });
-                tv.setText("");
+
             }
         });
     }
