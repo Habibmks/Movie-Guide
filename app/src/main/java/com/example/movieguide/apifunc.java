@@ -83,7 +83,7 @@ public class apifunc {
         void onResponse(List<MovieSearchReturn> movieSearchReturns);
     }
 
-
+    //String posterurl = "https://image.tmdb.org/t/p/original/8kNruSfhk5IoE4eZOc4UpvDn6tq.jpg";
     public void moviesearch(String query, String page, Context context, moviesearchlistener listener){
 
         String url="https://api.themoviedb.org/3/search/movie";
@@ -107,7 +107,7 @@ public class apifunc {
                     for (int i=0;i<array.length();i++) {
 
                         JSONObject view = (JSONObject) array.get(i);
-                        MovieSearchReturn movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"));
+                        MovieSearchReturn movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"),view.getString("poster_path"));
                         rtn.add(movies);
                     }
                     //view = array.getJSONObject(0);
@@ -126,4 +126,9 @@ public class apifunc {
         });
         Singleton.getInstance(context).addToRequestQueue(request);
     }
+    public interface movieposter{
+        void onError(String message);
+        void onResponse(String abc);
+    }
+    
 }

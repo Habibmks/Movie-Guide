@@ -1,5 +1,10 @@
 package com.example.movieguide;
 
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class MovieSearchReturn {
 
 
@@ -17,16 +22,18 @@ public class MovieSearchReturn {
     String overview;
     String title;
     String releasedate;
+    String poster;
     int id;
     public  MovieSearchReturn(){
 
     }
-    public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id) {
+    public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id,String poster) {
         this.original_title = original_title;
         this.overview = overview;
         this.title = title;
         this.releasedate = releasedate;
         this.id = id;
+        this.poster = "https://image.tmdb.org/t/p/original/" + poster;
     }
 
     public String getOriginal_title() {
@@ -68,4 +75,13 @@ public class MovieSearchReturn {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
 }

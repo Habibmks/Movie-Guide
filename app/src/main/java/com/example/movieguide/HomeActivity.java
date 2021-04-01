@@ -1,6 +1,8 @@
 package com.example.movieguide;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +36,11 @@ public class HomeActivity extends AppCompatActivity {
     String temp="";
     RequestQueue queue;
     ListView lv;
+    List<MovieSearchReturn> movieSearchReturn;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter rAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
             str = "Misafir";
         }
         queue = Volley.newRequestQueue(this);
+        movieSearchReturn = null;
 
 
         apibtn.setOnClickListener(new View.OnClickListener() {
@@ -70,19 +78,27 @@ public class HomeActivity extends AppCompatActivity {
                 func.moviesearch(name.getText().toString(), page.getText().toString(), HomeActivity.this, new apifunc.moviesearchlistener() {
                     @Override
                     public void onError(String message) {
-                        tv.setText("No Response");
+                        tv.setText(message);
                     }
 
                     @Override
                     public void onResponse(List<MovieSearchReturn> movieSearchReturns) {
-
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1,movieSearchReturns);
-                        lv.setAdapter(arrayAdapter);
-                        
+                        movieSearchReturn = movieSearchReturns;
+//                        ArrayAdapter arrayAdapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1,movieSearchReturns);
+//                        lv.setAdapter(arrayAdapter);
+                        tv.setText("");
+                        recyclerView = findViewById(R.id.rvmovie);
+                        recyclerView.setHasFixedSize(true);
+                        layoutManager = new LinearLayoutManager(HomeActivity.this);
+                        recyclerView.setLayoutManager(layoutManager);
+                        rAdapter = new RecyclerViewAdapter(movieSearchReturn,HomeActivity.this);
+                        recyclerView.setAdapter(rAdapter);
                     }
                 });
 
             }
         });
+
+
     }
 }
