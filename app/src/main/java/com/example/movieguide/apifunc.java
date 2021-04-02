@@ -83,7 +83,6 @@ public class apifunc {
         void onResponse(List<MovieSearchReturn> movieSearchReturns);
     }
 
-    //String posterurl = "https://image.tmdb.org/t/p/original/8kNruSfhk5IoE4eZOc4UpvDn6tq.jpg";
     public void moviesearch(String query, String page, Context context, moviesearchlistener listener){
 
         String url="https://api.themoviedb.org/3/search/movie";
@@ -107,7 +106,8 @@ public class apifunc {
                     for (int i=0;i<array.length();i++) {
 
                         JSONObject view = (JSONObject) array.get(i);
-                        MovieSearchReturn movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"),view.getString("poster_path"));
+                        MovieSearchReturn movies = objectcontroller(view);
+
                         rtn.add(movies);
                     }
                     //view = array.getJSONObject(0);
@@ -126,9 +126,32 @@ public class apifunc {
         });
         Singleton.getInstance(context).addToRequestQueue(request);
     }
-    public interface movieposter{
-        void onError(String message);
-        void onResponse(String abc);
+
+    //function that checks JSON array parameters exist
+    public static MovieSearchReturn objectcontroller (JSONObject view){
+        MovieSearchReturn movies = null;
+        try {
+            if (!view.has("release_date")){
+                movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),"No date",view.getInt("id"),view.getString("poster_path"));
+            }else if(!view.has("original_title")){
+                movies = new MovieSearchReturn("No_Title",view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"),view.getString("poster_path"));
+            }else if (!view.has("overview")){
+                movies = new MovieSearchReturn(view.getString("original_title"),"No_Overview", view.getString("title"), view.getString("release_date"), view.getInt("id"), view.getString("poster_path"));
+            }else if (!view.has("title")){
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"),"No_Title", view.getString("release_date"), view.getInt("id"), view.getString("poster_path"));
+            }else if (!view.has("id")){
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), Integer.parseInt("No id"), view.getString("poster_path"));
+            }else if (!view.has("poster_path")){
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), view.getInt("id"), "https://www.gulal2.com/images/no-image800.jpg");
+            }else {
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), view.getInt("id"), view.getString("poster_path"));
+            }
+        }catch (Exception e){
+
+        }
+
+        return movies;
+
     }
     
 }
