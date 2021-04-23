@@ -13,10 +13,10 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etidname"
-        app:layout_constraintVertical_bias="0.094" />
+        app:layout_constraintVertical_bias="0.041" />
 
     <Button
         android:id="@+id/buttonapi"
@@ -25,10 +25,10 @@
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvapi"
-        app:layout_constraintVertical_bias="0.086" />
+        app:layout_constraintVertical_bias="0.047" />
 
     <EditText
         android:id="@+id/etidpage"
@@ -59,27 +59,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.123" />
 
-    <ListView
-        android:id="@+id/home_lv"
-        android:layout_width="294dp"
-        android:layout_height="138dp"
-        android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonapi"
-        app:layout_constraintVertical_bias="0.063" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvmovie"
-        android:layout_width="352dp"
-        android:layout_height="229dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="373dp"
+        android:layout_height="421dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_lv"
-        app:layout_constraintVertical_bias="0.129" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonapi"
+        app:layout_constraintVertical_bias="0.071" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Comparator;
+
 public class MovieSearchReturn {
 
 
@@ -27,6 +29,20 @@ public class MovieSearchReturn {
     public  MovieSearchReturn(){
 
     }
+    public  static Comparator<MovieSearchReturn> comparatoryearascending = new Comparator<MovieSearchReturn>() {
+        @Override
+        public int compare(MovieSearchReturn m1, MovieSearchReturn m2) {
+            return m1.getReleasedate().compareTo(m2.getReleasedate());
+        }
+    };
+
+    public  static Comparator<MovieSearchReturn> comparatoryeardescending = new Comparator<MovieSearchReturn>() {
+        @Override
+        public int compare(MovieSearchReturn m1, MovieSearchReturn m2) {
+            return m2.getReleasedate().compareTo(m1.getReleasedate());
+        }
+    };
+
     public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id,String poster) {
         this.original_title = original_title;
         this.overview = overview;

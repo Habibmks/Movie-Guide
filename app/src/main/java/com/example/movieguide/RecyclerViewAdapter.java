@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -48,12 +49,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView ivmovie;
         TextView tvtitle;
         TextView tvdate;
-
+        ConstraintLayout layout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivmovie = itemView.findViewById(R.id.iv_poster);
             tvtitle = itemView.findViewById(R.id.tv_title);
             tvdate = itemView.findViewById(R.id.tv_date);
+            layout = itemView.findViewById(R.id.oneitemlayout);
         }
     }
 

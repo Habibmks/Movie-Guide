@@ -1,11 +1,15 @@
 package com.example.movieguide;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +30,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -37,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     RequestQueue queue;
     ListView lv;
     List<MovieSearchReturn> movieSearchReturn;
+    Menu menu;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter rAdapter;
@@ -48,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         tv = findViewById(R.id.tvapi); apibtn = findViewById(R.id.buttonapi);
         page = findViewById(R.id.etidpage); name = findViewById(R.id.etidname);
-        lv = findViewById(R.id.home_lv);
+
         tv.setText("");
         Intent intent = getIntent();
         if(intent.hasExtra("user_email")){
@@ -100,5 +107,28 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sortmenu,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.ascyear:
+                Collections.sort(movieSearchReturn,MovieSearchReturn.comparatoryearascending);
+                rAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.descyear:
+                Collections.sort(movieSearchReturn,MovieSearchReturn.comparatoryeardescending);
+                rAdapter.notifyDataSetChanged();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
