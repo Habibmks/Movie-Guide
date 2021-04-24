@@ -106,7 +106,7 @@ public class apifunc {
                     for (int i=0;i<array.length();i++) {
 
                         JSONObject view = (JSONObject) array.get(i);
-                        MovieSearchReturn movies = objectcontroller(view);
+                        MovieSearchReturn movies = movieobjectcontroller(view);
 
                         rtn.add(movies);
                     }
@@ -128,7 +128,7 @@ public class apifunc {
     }
 
     //function that checks JSON array parameters exist
-    public static MovieSearchReturn objectcontroller (JSONObject view){
+    public static MovieSearchReturn movieobjectcontroller (JSONObject view){
         MovieSearchReturn movies = null;
         try {
             if (!view.has("release_date")){
@@ -153,5 +153,8 @@ public class apifunc {
         return movies;
 
     }
-    
+
+    public void getmoviedetails(){
+        String url = "";
+    }
 }

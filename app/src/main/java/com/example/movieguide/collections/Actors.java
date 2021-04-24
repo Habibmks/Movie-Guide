@@ -1,4 +1,4 @@
-package com.example.movieguide;
+package com.example.movieguide.collections;
 
 import java.util.Comparator;
 
