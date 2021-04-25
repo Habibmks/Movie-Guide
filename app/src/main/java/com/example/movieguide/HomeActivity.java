@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.movieguide.collections.MovieDetails;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,17 +72,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 apifunc func = new apifunc();
-                /*func.searchMovies(name.getText().toString(), page.getText().toString(), HomeActivity.this, new apifunc.VolleyResponseListener() {
-                    @Override
-                    public void onError(String message) {
-                        tv.setText("No Response");
-                    }
-
-                    @Override
-                    public void onResponse(String rtn) {
-                        tv.setText(rtn);
-                    }
-                });*/
                 func.moviesearch(name.getText().toString(), page.getText().toString(), HomeActivity.this, new apifunc.moviesearchlistener() {
                     @Override
                     public void onError(String message) {
@@ -107,8 +97,9 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-    }
 
+    }
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -130,5 +121,5 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

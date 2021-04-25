@@ -1,6 +1,7 @@
 package com.example.movieguide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tvtitle.setText(movielist.get(position).getOriginal_title());
         holder.tvdate.setText(movielist.get(position).getReleasedate());
         Glide.with(this.context).load(movielist.get(position).poster).into(holder.ivmovie);
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,moviedetails.class);
+                intent.putExtra("movieid",String.valueOf(movielist.get(position).getId()));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

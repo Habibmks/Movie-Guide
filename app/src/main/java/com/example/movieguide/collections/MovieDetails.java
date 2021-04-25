@@ -8,15 +8,15 @@ import com.example.movieguide.R;
 
 public class MovieDetails {
 
-    private final String originalname;
-    private final String overview;
-    private final String posterpath;
-    private final String releasedate;
+    String originalname;
+    String overview;
+    String posterpath;
+    String releasedate;
 
     public MovieDetails(String originalname, String overview, String posterpath, String releasedate) {
         this.originalname = originalname;
         this.overview = overview;
-        this.posterpath = posterpath;
+        this.posterpath =  "https://image.tmdb.org/t/p/original/" +  posterpath;
         this.releasedate = releasedate;
     }
 

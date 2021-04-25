@@ -1,5 +1,6 @@
 package com.example.movieguide;
 
+import android.app.VoiceInteractor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.movieguide.collections.MovieDetails;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,8 +44,6 @@ public class apifunc {
         if(apiquery.equals("&query=")) apiquery="&query=fight";
         if(apipage.equals("&page=")) apipage="&page=1";
         url += apiquery + apipage;
-
-
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -154,7 +154,35 @@ public class apifunc {
 
     }
 
-    public void getmoviedetails(){
-        String url = "";
+    public interface moviedetailslistener{
+        void onError(String message);
+        void onResponse(MovieDetails movieDetails);
+    }
+
+    public void getmoviedetails(String id,Context context, moviedetailslistener listener){
+
+        String url = "https://api.themoviedb.org/3/movie/";
+        if(id == null) id = "603";
+        url = url + id + key;
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    MovieDetails detail = new MovieDetails(response.getString("original_title"),response.getString("overview"),response.getString("poster_path"),response.getString("release_date"));
+
+                    listener.onResponse(detail);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    listener.onError(e.getMessage().toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
     }
 }
