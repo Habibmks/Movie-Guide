@@ -20,6 +20,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     List<MovieSearchReturn> movielist;
     Context context;
+    apifunc api = new apifunc();
 
     public RecyclerViewAdapter(List<MovieSearchReturn> movielist, Context context) {
         this.movielist = movielist;
@@ -39,6 +40,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tvtitle.setText(movielist.get(position).getOriginal_title());
         holder.tvdate.setText(movielist.get(position).getReleasedate());
         Glide.with(this.context).load(movielist.get(position).poster).into(holder.ivmovie);
+        int size = movielist.get(position).getSize();
+        String[] genre = movielist.get(position).getGenres();
+        for (int i=0; i<size;i++){
+            genre[i] = api.genres(Integer.parseInt(genre[i]));
+            holder.tvgenres.append(genre[i] + ", ");
+        }
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView ivmovie;
         TextView tvtitle;
         TextView tvdate;
+        TextView tvgenres;
         ConstraintLayout layout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvtitle = itemView.findViewById(R.id.tv_title);
             tvdate = itemView.findViewById(R.id.tv_date);
             layout = itemView.findViewById(R.id.oneitemlayout);
+            tvgenres = itemView.findViewById(R.id.tvgenres);
         }
     }
 

@@ -26,6 +26,28 @@ public class MovieSearchReturn {
     String releasedate;
     String poster;
     int id;
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    int size;
+    String[] genres = new String[size];
+
+
+    public String[] getGenres() {
+        return genres;
+    }
+
+    public void setGenres(String[] genres) {
+        this.genres = genres;
+    }
+
+
     public  MovieSearchReturn(){
 
     }
@@ -43,13 +65,15 @@ public class MovieSearchReturn {
         }
     };
 
-    public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id,String poster) {
+    public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id,String poster, String[] genres,int size) {
         this.original_title = original_title;
         this.overview = overview;
         this.title = title;
         this.releasedate = releasedate;
         this.id = id;
         this.poster = "https://image.tmdb.org/t/p/original/" + poster;
+        this.genres = genres;
+        this.size = size;
     }
 
     public String getOriginal_title() {

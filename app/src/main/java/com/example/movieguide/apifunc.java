@@ -106,7 +106,8 @@ public class apifunc {
                     for (int i=0;i<array.length();i++) {
 
                         JSONObject view = (JSONObject) array.get(i);
-                        MovieSearchReturn movies = movieobjectcontroller(view);
+                        JSONArray ids = view.getJSONArray("genre_ids");
+                        MovieSearchReturn movies = movieobjectcontroller(view,ids);
 
                         rtn.add(movies);
                     }
@@ -128,23 +129,31 @@ public class apifunc {
     }
 
     //function that checks JSON array parameters exist
-    public static MovieSearchReturn movieobjectcontroller (JSONObject view){
+    public static MovieSearchReturn movieobjectcontroller (JSONObject view,JSONArray array) throws JSONException {
         MovieSearchReturn movies = null;
+        String[] id = new String[array.length()];
+        for (int a=0;a<array.length();a++){
+            if (array.getString(a)!=null){
+                id[a] = array.getString(a);
+            }else{
+
+            }
+        }
         try {
             if (!view.has("release_date")){
-                movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),"No date",view.getInt("id"),view.getString("poster_path"));
+                movies = new MovieSearchReturn(view.getString("original_title"),view.getString("overview"),view.getString("title"),"No date",view.getInt("id"),view.getString("poster_path"),id,array.length());
             }else if(!view.has("original_title")){
-                movies = new MovieSearchReturn("No_Title",view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"),view.getString("poster_path"));
+                movies = new MovieSearchReturn("No_Title",view.getString("overview"),view.getString("title"),view.getString("release_date"),view.getInt("id"),view.getString("poster_path"),id,array.length());
             }else if (!view.has("overview")){
-                movies = new MovieSearchReturn(view.getString("original_title"),"No_Overview", view.getString("title"), view.getString("release_date"), view.getInt("id"), view.getString("poster_path"));
+                movies = new MovieSearchReturn(view.getString("original_title"),"No_Overview", view.getString("title"), view.getString("release_date"), view.getInt("id"), view.getString("poster_path"),id,array.length());
             }else if (!view.has("title")){
-                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"),"No_Title", view.getString("release_date"), view.getInt("id"), view.getString("poster_path"));
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"),"No_Title", view.getString("release_date"), view.getInt("id"), view.getString("poster_path"),id,array.length());
             }else if (!view.has("id")){
-                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), Integer.parseInt("No id"), view.getString("poster_path"));
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), Integer.parseInt("No id"), view.getString("poster_path"),id,array.length());
             }else if (!view.has("poster_path")){
-                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), view.getInt("id"), "https://www.gulal2.com/images/no-image800.jpg");
-            }else {
-                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), view.getInt("id"), view.getString("poster_path"));
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), view.getInt("id"), "https://www.gulal2.com/images/no-image800.jpg",id,array.length());
+            }else{
+                movies = new MovieSearchReturn(view.getString("original_title"), view.getString("overview"), view.getString("title"), view.getString("release_date"), view.getInt("id"), view.getString("poster_path"),id,array.length());
             }
         }catch (Exception e){
 
@@ -184,5 +193,49 @@ public class apifunc {
             }
         });
         Singleton.getInstance(context).addToRequestQueue(request);
+    }
+    public static String genres(int id){
+        switch (id){
+            case 28:
+                return "Action";
+            case 12:
+                return "Adventure";
+            case 16:
+                return "Animation";
+            case 35:
+                return "Comedy";
+            case 80:
+                return "Crime";
+            case 99:
+                return "Documentary";
+            case 18:
+                return "Drama";
+            case 10751:
+                return "Family";
+            case 14:
+                return "Fantasy";
+            case 36:
+                return "History";
+            case 27:
+                return "Horror";
+            case 10402:
+                return "Music";
+            case 9648:
+                return "Mystery";
+            case 10749:
+                return "Romance";
+            case 878:
+                return "Science Fiction";
+            case 10770:
+                return "TV Movie";
+            case 53:
+                return "Thriller";
+            case 10752:
+                return "War";
+            case 37:
+                return "Western";
+            default:
+                return null;
+        }
     }
 }
