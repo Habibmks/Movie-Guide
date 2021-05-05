@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/ivactorview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:id="@+id/ivsimple"
+        android:layout_width="98dp"
+        android:layout_height="123dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvactorview"
+        android:id="@+id/tvsimple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="4dp"
         android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/ivactorview"
-        app:layout_constraintTop_toBottomOf="@+id/ivactorview" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ivsimple"
+        app:layout_constraintTop_toBottomOf="@+id/ivsimple" />
 
     <View
         android:id="@+id/divider2"
@@ -36,16 +35,16 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toStartOf="@+id/divider3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvactorview" />
+        app:layout_constraintTop_toBottomOf="@+id/tvsimple" />
 
     <View
         android:id="@+id/divider3"
         android:layout_width="1dp"
         android:layout_height="0dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginLeft="17dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="@+id/divider2"
-        app:layout_constraintStart_toEndOf="@+id/ivactorview"
+        app:layout_constraintStart_toEndOf="@+id/ivsimple"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

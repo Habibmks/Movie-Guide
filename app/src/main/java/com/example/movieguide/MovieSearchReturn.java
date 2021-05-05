@@ -26,6 +26,7 @@ public class MovieSearchReturn {
     String releasedate;
     String poster;
     int id;
+    int size;
 
     public int getSize() {
         return size;
@@ -35,7 +36,7 @@ public class MovieSearchReturn {
         this.size = size;
     }
 
-    int size;
+
     String[] genres = new String[size];
 
 

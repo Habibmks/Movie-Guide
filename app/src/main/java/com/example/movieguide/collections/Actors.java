@@ -4,18 +4,18 @@ import java.util.Comparator;
 
 public class Actors {
 
-    private final int id;
-    private final String name;
-    private final String chname;
-    private final String poster;
-    private final int gender;
-    private final float popularity;
+    private int id;
+    private String name;
+    private String chname;
+    private String poster;
+    private int gender;
+    private float popularity;
 
     public Actors(int id, String name, String chname, String poster, int gender,float popularity) {
         this.id = id;
         this.name = name;
         this.chname = chname;
-        this.poster = poster;
+        this.poster = "https://image.tmdb.org/t/p/original/" + poster;
         this.gender = gender;
         this.popularity = popularity;
 
@@ -43,6 +43,30 @@ public class Actors {
 
     public float getPopularity(){
         return popularity;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setChname(String chname) {
+        this.chname = chname;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
     }
 
     public static Comparator<Actors> popularitycomparator = new Comparator<Actors>() {

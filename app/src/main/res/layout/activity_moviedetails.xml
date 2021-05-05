@@ -34,8 +34,10 @@
         android:id="@+id/tvmovieoverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="tv3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/ivmoviedetails"
         app:layout_constraintTop_toBottomOf="@+id/ivmoviedetails" />
 
@@ -61,8 +63,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/actorrecyclerview"
-        android:layout_width="388dp"
-        android:layout_height="144dp"
+        android:layout_width="385dp"
+        android:layout_height="160dp"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.478"
@@ -75,19 +77,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Similar Movies"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="@+id/actorrecyclerview"
         app:layout_constraintTop_toBottomOf="@+id/actorrecyclerview" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/similarrecyclerview"
-        android:layout_width="391dp"
-        android:layout_height="266dp"
+        android:layout_width="380dp"
+        android:layout_height="168dp"
         android:layout_marginTop="6dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.666" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

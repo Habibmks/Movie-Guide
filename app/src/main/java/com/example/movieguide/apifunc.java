@@ -13,6 +13,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.movieguide.collections.Actors;
 import com.example.movieguide.collections.MovieDetails;
 
 import org.json.JSONArray;
@@ -128,6 +129,108 @@ public class apifunc {
         Singleton.getInstance(context).addToRequestQueue(request);
     }
 
+
+
+    public interface moviedetailslistener{
+        void onError(String message);
+        void onResponse(MovieDetails movieDetails);
+    }
+
+    public void getmoviedetails(String id,Context context, moviedetailslistener listener){
+
+        String url = "https://api.themoviedb.org/3/movie/";
+        if(id == null) id = "603";
+        url = url + id + key;
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    MovieDetails detail = new MovieDetails(response.getString("original_title"),response.getString("overview"),response.getString("poster_path"),response.getString("release_date"));
+
+                    listener.onResponse(detail);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    listener.onError(e.getMessage().toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
+    }
+    public interface getactorslistener{
+        void onError(String message);
+        void onResponse(List<Actors> actors);
+    }
+    public void getactors(String id,Context context,getactorslistener listener){
+        String url = "https://api.themoviedb.org/3/movie/";
+        url = url + id + "/credits" + key;
+        RequestQueue queue = Volley.newRequestQueue(context);
+        List<Actors> actorsList = new ArrayList<>();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("cast");
+                    for (int i = 0;i<array.length();i++){
+                        JSONObject object = array.getJSONObject(i);
+                        Actors actors = new Actors(object.getInt("id"),object.getString("name"),object.getString("character"),object.getString("profile_path"),object.getInt("gender"),Float.parseFloat(object.getString("popularity")));
+                        actorsList.add(actors);
+                    }
+                    listener.onResponse(actorsList);
+                } catch (JSONException e) {
+                    listener.onError(e.toString());
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            listener.onError(error.toString());
+            }
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
+    }
+    public interface getsimilars{
+        void onError(String message);
+        void onResponse(List<MovieSearchReturn> movieSearchReturns);
+    }
+    public void getsimilars(String id,Context context,getsimilars listener){
+        String url = "https://api.themoviedb.org/3/movie/";
+        url = url + id + "/similar" + key;
+        RequestQueue queue = Volley.newRequestQueue(context);
+        List<MovieSearchReturn> movie = new ArrayList<>();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("results");
+                    for (int i = 0;i<array.length();i++){
+                        JSONObject object = array.getJSONObject(i);
+                        JSONArray genres = object.getJSONArray("genre_ids");
+                        String[] id = new String[array.length()];
+                        MovieSearchReturn movies = movieobjectcontroller(object,genres);
+                        movie.add(movies);
+
+                    }
+                    listener.onResponse(movie);
+                }catch (JSONException e){
+                    listener.onError(e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
+    }
     //function that checks JSON array parameters exist
     public static MovieSearchReturn movieobjectcontroller (JSONObject view,JSONArray array) throws JSONException {
         MovieSearchReturn movies = null;
@@ -161,38 +264,6 @@ public class apifunc {
 
         return movies;
 
-    }
-
-    public interface moviedetailslistener{
-        void onError(String message);
-        void onResponse(MovieDetails movieDetails);
-    }
-
-    public void getmoviedetails(String id,Context context, moviedetailslistener listener){
-
-        String url = "https://api.themoviedb.org/3/movie/";
-        if(id == null) id = "603";
-        url = url + id + key;
-        RequestQueue queue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    MovieDetails detail = new MovieDetails(response.getString("original_title"),response.getString("overview"),response.getString("poster_path"),response.getString("release_date"));
-
-                    listener.onResponse(detail);
-                }catch (JSONException e){
-                    e.printStackTrace();
-                    listener.onError(e.getMessage().toString());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        Singleton.getInstance(context).addToRequestQueue(request);
     }
     public static String genres(int id){
         switch (id){
@@ -234,6 +305,16 @@ public class apifunc {
                 return "War";
             case 37:
                 return "Western";
+            default:
+                return null;
+        }
+    }
+    public static String gender(int i){
+        switch (i){
+            case 1:
+                return "Female";
+            case 2:
+                return "Male";
             default:
                 return null;
         }
