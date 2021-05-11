@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieGuide">
-        <activity android:name=".moviedetails"></activity>
-        <activity android:name=".collections.MovieDetails" />
+        <activity android:name=".Actordetails"></activity>
+        <activity android:name=".moviedetails" />
+        <activity android:name=".collections.Movies.MovieDetails" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">

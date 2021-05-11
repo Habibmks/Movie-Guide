@@ -9,7 +9,6 @@ import java.util.Comparator;
 
 public class MovieSearchReturn {
 
-
     @Override
     public String toString() {
         return  "Original Title: " + original_title + '\'' +
@@ -39,7 +38,6 @@ public class MovieSearchReturn {
 
     String[] genres = new String[size];
 
-
     public String[] getGenres() {
         return genres;
     }
@@ -48,23 +46,9 @@ public class MovieSearchReturn {
         this.genres = genres;
     }
 
-
     public  MovieSearchReturn(){
 
     }
-    public  static Comparator<MovieSearchReturn> comparatoryearascending = new Comparator<MovieSearchReturn>() {
-        @Override
-        public int compare(MovieSearchReturn m1, MovieSearchReturn m2) {
-            return m1.getReleasedate().compareTo(m2.getReleasedate());
-        }
-    };
-
-    public  static Comparator<MovieSearchReturn> comparatoryeardescending = new Comparator<MovieSearchReturn>() {
-        @Override
-        public int compare(MovieSearchReturn m1, MovieSearchReturn m2) {
-            return m2.getReleasedate().compareTo(m1.getReleasedate());
-        }
-    };
 
     public MovieSearchReturn(String original_title, String overview, String title, String releasedate, int id,String poster, String[] genres,int size) {
         this.original_title = original_title;
@@ -124,5 +108,19 @@ public class MovieSearchReturn {
     public void setPoster(String poster) {
         this.poster = poster;
     }
+
+    public  static Comparator<MovieSearchReturn> comparatoryearascending = new Comparator<MovieSearchReturn>() {
+        @Override
+        public int compare(MovieSearchReturn m1, MovieSearchReturn m2) {
+            return m1.getReleasedate().compareTo(m2.getReleasedate());
+        }
+    };
+
+    public  static Comparator<MovieSearchReturn> comparatoryeardescending = new Comparator<MovieSearchReturn>() {
+        @Override
+        public int compare(MovieSearchReturn m1, MovieSearchReturn m2) {
+            return m2.getReleasedate().compareTo(m1.getReleasedate());
+        }
+    };
 
 }

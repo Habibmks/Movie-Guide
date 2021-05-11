@@ -1,4 +1,4 @@
-package com.example.movieguide.collections;
+package com.example.movieguide.collections.Actors;
 
 import java.util.Comparator;
 
@@ -6,15 +6,13 @@ public class Actors {
 
     private int id;
     private String name;
-    private String chname;
     private String poster;
     private int gender;
     private float popularity;
 
-    public Actors(int id, String name, String chname, String poster, int gender,float popularity) {
+    public Actors(int id, String name, String poster, int gender,float popularity) {
         this.id = id;
         this.name = name;
-        this.chname = chname;
         this.poster = "https://image.tmdb.org/t/p/original/" + poster;
         this.gender = gender;
         this.popularity = popularity;
@@ -27,10 +25,6 @@ public class Actors {
 
     public String getName() {
         return name;
-    }
-
-    public String getChname() {
-        return chname;
     }
 
     public String getPoster() {
@@ -53,10 +47,6 @@ public class Actors {
         this.name = name;
     }
 
-    public void setChname(String chname) {
-        this.chname = chname;
-    }
-
     public void setPoster(String poster) {
         this.poster = poster;
     }
@@ -77,4 +67,14 @@ public class Actors {
             return 0;
         }
     };
+    public static String gender(int i){
+        switch (i){
+            case 1:
+                return "Female";
+            case 2:
+                return "Male";
+            default:
+                return null;
+        }
+    }
 }
