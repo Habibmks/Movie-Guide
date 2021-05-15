@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Movie"
+        android:title="Movies" />
+    <item
+        android:id="@+id/Actors"
+        android:title="Actors"/>
+    <item
+        android:id="@+id/Series"
+        android:title="Series"/>
+    <item
+        android:id="@+id/Profile"
+        android:title="Profile"/>
+
+</menu>

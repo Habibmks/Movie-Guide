@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         String email = logemail.getText().toString(), password = logpassw.getText().toString();
 
         if (email.equals("admin") && password.equals("admin")){
-            Intent intent = new Intent(this,HomeActivity.class);
+            Intent intent = new Intent(this,Test.class);
             intent.putExtra("email",email);
             startActivity(intent);
         }else tv.setText("Username or Password is wrong");

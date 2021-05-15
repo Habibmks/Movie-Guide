@@ -2,6 +2,7 @@ package com.example.movieguide;
 
 import android.app.VoiceInteractor;
 import android.content.Context;
+import android.graphics.drawable.Icon;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.movieguide.collections.Actors.ActorDetails;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.Movies.MovieDetails;
+import com.example.movieguide.collections.Shows.Shows;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,7 +97,7 @@ public class apifunc {
         List<MovieSearchReturn> rtn = new ArrayList<>();
 
         RequestQueue queue = Volley.newRequestQueue(context);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -284,7 +286,77 @@ public class apifunc {
         });
         Singleton.getInstance(context).addToRequestQueue(request);
     }
+    public interface actorsearchlistener{
+        void onError(String message);
+        void onResponse(List<Actors> actors);
+    }
+    public void actorsearch(String name,Context context,actorsearchlistener listener){
+        String url = "https://api.themoviedb.org/3/search/person";
+        String query = "&query=" + name;
+        url = url + key + query;
+        List<Actors> actorlist = new ArrayList<>();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("results");
+                    for (int i = 0;i<array.length();i++){
+                        JSONObject object = array.getJSONObject(i);
+                        Actors actors = new Actors(object.getInt("id"),object.getString("name"),object.getString("profile_path"),object.getInt("gender"),Float.parseFloat(object.getString("popularity")));
+                        actorlist.add(actors);
+                    }
+                    listener.onResponse(actorlist);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
+            }
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
+    }
+    public interface showsearchlistener{
+        void onError(String message);
+        void onResponse(List<Shows> showsList);
+    }
+    public void showsearch(String name,Context context,showsearchlistener listener){
+        String url = "https://api.themoviedb.org/3/search/tv";
+        String query = "&query=" + name;
+        url = url + key + query;
+        List<Shows> showlist = new ArrayList<>();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("results");
+                    for (int i = 0;i<array.length();i++){
+                        JSONObject object = array.getJSONObject(i);
+                        JSONArray genre = object.getJSONArray("genre_ids");
+                        String[] genres = new String[genre.length()];
+                        for (int a = 0;a<genre.length();a++){
+                            genres[a] = genre.getString(a);
+                        }
+                        Shows shows = new Shows(object.getInt("id"),genre.length(),genres,object.getString("name"),object.getString("overview"),object.getString("poster_path"),object.getString("original_name"),object.getString("first_air_date"));
+                        showlist.add(shows);
+                    }
+                    listener.onResponse(showlist);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
+    }
     //function that checks JSON array parameters exist
     public static MovieSearchReturn movieobjectcontroller (JSONObject view,JSONArray array) throws JSONException {
         MovieSearchReturn movies = null;

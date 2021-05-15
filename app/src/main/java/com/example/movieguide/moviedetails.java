@@ -53,7 +53,6 @@ public class moviedetails extends AppCompatActivity {
                     }
                     @Override
                     public void onResponse(List<Actors> actors) {
-                        tvdate.setText("actors");
                         act = actors;
                         recyclerView = findViewById(R.id.actorrecyclerview);
                         recyclerView.setHasFixedSize(true);
