@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "991863108446",
+    "project_id": "movie-guide-5585d",
+    "storage_bucket": "movie-guide-5585d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991863108446:android:2e1cb7c894dffd4b2e55cf",
+        "android_client_info": {
+          "package_name": "com.example.movieguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991863108446-lvc8os1055uj8rhi1lu34vvhn246b6i6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_y5kHrcYd_fyKNnssI838C1znnUpQs-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991863108446-lvc8os1055uj8rhi1lu34vvhn246b6i6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
