@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "593894831868",
+    "firebase_url": "https://movie-39003-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "movie-39003",
+    "storage_bucket": "movie-39003.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593894831868:android:3cdecc154224b964dcc979",
+        "android_client_info": {
+          "package_name": "com.example.movieguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593894831868-15ialc9cpjm70jd6m3fklbjl1r8q45pc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2WKnyMQoBolws8FHIEP67FvVywPrjgnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593894831868-15ialc9cpjm70jd6m3fklbjl1r8q45pc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

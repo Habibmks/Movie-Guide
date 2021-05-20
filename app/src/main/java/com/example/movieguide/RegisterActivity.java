@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class RegisterActivity extends AppCompatActivity {
     String str = "", toast="";
     Button registerbtn;
@@ -37,6 +40,10 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
     public void register(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");
         name =  findViewById(R.id.editTextTextPersonName);
         surname = findViewById(R.id.editTextTextPersonName2);
         username = findViewById(R.id.editTextTextPersonName3);
