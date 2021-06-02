@@ -59,7 +59,7 @@ public class MovieFragment extends Fragment {
     }
     public void search(View v,String query){
         apifunc func = new apifunc();
-        func.moviesearch(query, "1", context, new apifunc.moviesearchlistener() {
+        func.moviesearch(query, "1", context, new apifunc.moviesearchlistener   () {
             @Override
             public void onError(String message) {
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.movieguide.collections.User.User;
 import com.example.movieguide.collections.fragments.ActorFragment;
 import com.example.movieguide.collections.fragments.MovieFragment;
 import com.example.movieguide.collections.fragments.ProfileFragment;
@@ -18,11 +19,13 @@ public class viewadapter extends FragmentStateAdapter {
 
     int count;
     Context context;
+    User user;
 
-    public viewadapter(@NonNull FragmentActivity fragmentActivity,int count,Context context) {
+    public viewadapter(@NonNull FragmentActivity fragmentActivity,int count,Context context,User user) {
         super(fragmentActivity);
         this.count = count;
         this.context = context;
+        this.user = user;
     }
 
     @NonNull
@@ -32,7 +35,7 @@ public class viewadapter extends FragmentStateAdapter {
             case 0: return new MovieFragment(context);
             case 1: return new ActorFragment(context);
             case 2: return new SeriesFragment(context);
-            case 3: return new ProfileFragment();
+            case 3: return new ProfileFragment(context,user);
             default: return new MovieFragment(context);
         }
     }
