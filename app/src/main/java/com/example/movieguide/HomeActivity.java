@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -15,72 +16,73 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.movieguide.Firebase.Firestore;
+import com.example.movieguide.collections.Movies.MovieDetails;
+import com.example.movieguide.collections.User.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-    TextView tv;
-    Button apibtn;
-    EditText page,name;
-    String str;
-    String temp="";
-    RequestQueue queue;
-    ListView lv;
-    List<MovieSearchReturn> movieSearchReturn;
-    Menu menu;
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter rAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    static List<String> idlist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        tv = findViewById(R.id.tvapi); apibtn = findViewById(R.id.buttonapi);
-        page = findViewById(R.id.etidpage); name = findViewById(R.id.etidname);
-
-        tv.setText("");
+        recyclerView = findViewById(R.id.rvfavorites);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         Intent intent = getIntent();
-        if(intent.hasExtra("user_email")){
-            str = intent.getStringExtra("user_email").toString();
-        }else {
-            str = "Misafir";
-        }
-        queue = Volley.newRequestQueue(this);
-        movieSearchReturn = null;
-
-
-        apibtn.setOnClickListener(new View.OnClickListener() {
+        String title = intent.getStringExtra("title");
+        String userid = intent.getStringExtra("userid");
+        User user = (User) intent.getSerializableExtra("user");
+        Firestore firestore = new Firestore(userid);
+        apifunc apifunc = new apifunc();
+        TextView tvtitle = findViewById(R.id.tvfavorites);
+        tvtitle.setText(title);
+        idlist = new ArrayList<>();
+        
+        firestore.listgetter("Favorites", "movies", new Firestore.getlist() {
             @Override
-            public void onClick(View v) {
-                apifunc func = new apifunc();
-                func.moviesearch(name.getText().toString(), page.getText().toString(), HomeActivity.this, new apifunc.moviesearchlistener() {
-                    @Override
-                    public void onError(String message) {
-                        tv.setText(message);
-                    }
-
-                    @Override
-                    public void onResponse(List<MovieSearchReturn> movieSearchReturns) {
-                        movieSearchReturn = movieSearchReturns;
-//                        ArrayAdapter arrayAdapter = new ArrayAdapter(HomeActivity.this, android.R.layout.simple_list_item_1,movieSearchReturns);
-//                        lv.setAdapter(arrayAdapter);
-                        tv.setText("");
-                        recyclerView = findViewById(R.id.rvmovie);
-                        recyclerView.setHasFixedSize(true);
-                        layoutManager = new LinearLayoutManager(HomeActivity.this);
-                        recyclerView.setLayoutManager(layoutManager);
-                        rAdapter = new RecyclerViewAdapter(movieSearchReturn,HomeActivity.this);
-                        recyclerView.setAdapter(rAdapter);
-                    }
-                });
-
+            public void onResponse(ArrayList<String> list) {
+                if (!list.isEmpty()){
+                    idlist = list;
+                    setlist(user,userid);
+                }
             }
         });
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
 
+            }
+        };
 
+    }
+    public void setlist(User user,String userid){
+        apifunc apifunc = new apifunc();
+        List<MovieSearchReturn> movieSearchReturnList = new ArrayList<>();
+        try {
+            apifunc.moviebyid(HomeActivity.this, idlist, new apifunc.idmovielistener() {
+                @Override
+                public void onError(String message) {
 
+                }
+
+                @Override
+                public void onResponse(MovieSearchReturn movieSearchReturn) {
+                    movieSearchReturnList.add(movieSearchReturn);
+                    rAdapter = new RecyclerViewAdapter(movieSearchReturnList,HomeActivity.this,user,userid);
+                    recyclerView.setAdapter(rAdapter);
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 /*
     @Override

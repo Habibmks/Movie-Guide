@@ -1,6 +1,7 @@
 package com.example.movieguide.collections;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.movieguide.Actordetails;
 import com.example.movieguide.R;
 import com.example.movieguide.collections.Actors.Actors;
 
@@ -20,9 +22,11 @@ import java.util.List;
 public class ActorRVAdapterVerical extends RecyclerView.Adapter<ActorRVAdapterVerical.ViewHolder> {
     Context context;
     List<Actors> actorsList;
-    public ActorRVAdapterVerical(List<Actors> actorsList,Context context){
+    String userid;
+    public ActorRVAdapterVerical(List<Actors> actorsList,Context context,String userid){
         this.actorsList = actorsList;
         this.context = context;
+        this.userid = userid;
     }
 
     @NonNull
@@ -37,6 +41,12 @@ public class ActorRVAdapterVerical extends RecyclerView.Adapter<ActorRVAdapterVe
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv.setText(actorsList.get(position).getName());
         Glide.with(this.context).load(actorsList.get(position).getPoster()).into(holder.iv);
+        holder.layout.setOnClickListener(v -> {
+            Intent intent = new Intent(context, Actordetails.class);
+            intent.putExtra("id",String.valueOf(actorsList.get(position).getId()));
+            intent.putExtra("userid",userid);
+            context.startActivity(intent);
+        });
     }
 
     @Override

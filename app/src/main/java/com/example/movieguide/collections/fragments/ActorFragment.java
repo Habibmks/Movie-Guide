@@ -17,6 +17,7 @@ import com.example.movieguide.R;
 import com.example.movieguide.apifunc;
 import com.example.movieguide.collections.ActorRVAdapterVerical;
 import com.example.movieguide.collections.Actors.Actors;
+import com.example.movieguide.collections.User.User;
 
 import java.util.List;
 
@@ -27,10 +28,14 @@ public class ActorFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter rAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    User user;
+    String userid;
 
-    public ActorFragment(Context context) {
+    public ActorFragment(Context context,User user,String userid) {
         // Required empty public constructor
         this.context = context;
+        this.user = user;
+        this.userid = userid;
     }
 
 
@@ -50,6 +55,19 @@ public class ActorFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
+        apifunc apifunc = new apifunc();
+        apifunc.popactors(context, new apifunc.popactorlistener() {
+            @Override
+            public void onResponse(List<Actors> list) {
+                rAdapter = new ActorRVAdapterVerical(list,context,userid);
+                recyclerView.setAdapter(rAdapter);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +86,7 @@ public class ActorFragment extends Fragment {
 
             @Override
             public void onResponse(List<Actors> actors) {
-                rAdapter = new ActorRVAdapterVerical(actors,context);
+                rAdapter = new ActorRVAdapterVerical(actors,context,userid);
                 recyclerView.setAdapter(rAdapter);
             }
         });

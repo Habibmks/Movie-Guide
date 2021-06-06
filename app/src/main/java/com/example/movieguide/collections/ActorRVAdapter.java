@@ -25,10 +25,12 @@ public class ActorRVAdapter extends RecyclerView.Adapter<ActorRVAdapter.ViewHold
     List<com.example.movieguide.collections.Actors.Actors> Actors;
     Context context;
     apifunc func;
+    String userid;
 
-    public ActorRVAdapter(List<Actors> actors, Context context) {
+    public ActorRVAdapter(List<Actors> actors, Context context,String userid) {
         this.Actors = actors;
         this.context = context;
+        this.userid = userid;
     }
 
     @NonNull
@@ -50,6 +52,7 @@ public class ActorRVAdapter extends RecyclerView.Adapter<ActorRVAdapter.ViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(context, Actordetails.class);
                 intent.putExtra("id",String.valueOf(Actors.get(position).getId()));
+                intent.putExtra("userid",userid);
                 context.startActivity(intent);
             }
         });

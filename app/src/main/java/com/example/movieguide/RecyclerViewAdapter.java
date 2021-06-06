@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.movieguide.collections.User.User;
 
 import java.util.List;
 
@@ -21,10 +22,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     List<MovieSearchReturn> movielist;
     Context context;
     apifunc api = new apifunc();
+    User user;
+    String userid;
 
-    public RecyclerViewAdapter(List<MovieSearchReturn> movielist, Context context) {
+    public RecyclerViewAdapter(List<MovieSearchReturn> movielist, Context context,User user,String userid) {
         this.movielist = movielist;
         this.context = context;
+        this.user = user;
+        this.userid = userid;
     }
 
 
@@ -45,15 +50,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide.with(this.context).load(movielist.get(position).poster).into(holder.ivmovie);
         int size = movielist.get(position).getSize();
         String[] genre = movielist.get(position).getGenres();
-        for (int i=0; i<size;i++){
+        //BAKILACAK!!!!!
+        /*for (int i=0; i<size;i++){
             genre[i] = api.genres(Integer.parseInt(genre[i]));
             holder.tvgenres.append(genre[i] + ", ");
-        }
+        }*/
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,moviedetails.class);
                 intent.putExtra("movieid",String.valueOf(movielist.get(position).getId()));
+                intent.putExtra("user",user);
+                intent.putExtra("userid",userid);
                 context.startActivity(intent);
             }
         });

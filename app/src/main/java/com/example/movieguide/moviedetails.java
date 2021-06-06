@@ -6,14 +6,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.movieguide.Firebase.Firestore;
 import com.example.movieguide.collections.ActorRVAdapter;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.Movies.MovieDetails;
 import com.example.movieguide.collections.SimilarRVAdapter;
+import com.example.movieguide.collections.User.User;
 
 import java.util.List;
 
@@ -22,6 +26,7 @@ public class moviedetails extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter rAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    User user;
 
     List<Actors> act;
     List<MovieSearchReturn> movies;
@@ -36,12 +41,30 @@ public class moviedetails extends AppCompatActivity {
             //it's the Matrix
             movieid = "603";
         }
+        user = (User) intent.getSerializableExtra("user");
+        String userid = intent.getStringExtra("userid");
         act = null;
         movies = null;
         ImageView imageView = findViewById(R.id.ivmoviedetails);
         TextView tvname = findViewById(R.id.tvmoviename);
         TextView tvdate = findViewById(R.id.tvreleasedate);
         TextView tvoverview = findViewById(R.id.tvmovieoverview);
+        Firestore firestore = new Firestore(userid);
+        Button fav = findViewById(R.id.btnmoviefav);
+        firestore.checker("movies",movieid, new Firestore.itemcheck() {
+            @Override
+            public void onResponse(Boolean bool) {
+                fav.setText(bool ? "Remove":"Add");
+                fav.setVisibility(View.VISIBLE);
+            }
+        });
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firestore.addfav(movieid,"movies");
+                fav.setText(fav.getText().toString().equals("Add") ? "Remove":"Add");
+            }
+        });
         apifunc func = new apifunc();
         Runnable rvrunnable = new Runnable() {
             @Override
@@ -59,7 +82,7 @@ public class moviedetails extends AppCompatActivity {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(moviedetails.this);
                         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(linearLayoutManager);
-                        rAdapter = new ActorRVAdapter(act,moviedetails.this);
+                        rAdapter = new ActorRVAdapter(act,moviedetails.this,userid);
                         recyclerView.setAdapter(rAdapter);
                         }
                 });
@@ -77,7 +100,7 @@ public class moviedetails extends AppCompatActivity {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(moviedetails.this);
                         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(linearLayoutManager);
-                        rAdapter = new SimilarRVAdapter(movies,moviedetails.this);
+                        rAdapter = new SimilarRVAdapter(movies,moviedetails.this,user,userid);
                         recyclerView.setAdapter(rAdapter);
                         }
                 });

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.movieguide.MovieSearchReturn;
 import com.example.movieguide.R;
+import com.example.movieguide.collections.User.User;
 import com.example.movieguide.moviedetails;
 
 import java.util.List;
@@ -24,9 +25,13 @@ public class SimilarRVAdapter extends RecyclerView.Adapter<SimilarRVAdapter.View
 
     List<MovieSearchReturn> movieSearchReturns;
     Context context;
-    public SimilarRVAdapter(List<MovieSearchReturn> movieSearchReturns, Context context) {
+    User user;
+    String userid;
+    public SimilarRVAdapter(List<MovieSearchReturn> movieSearchReturns, Context context,User user,String userid) {
         this.movieSearchReturns = movieSearchReturns;
         this.context = context;
+        this.user = user;
+        this.userid = userid;
     }
     @NonNull
     @Override
@@ -46,6 +51,8 @@ public class SimilarRVAdapter extends RecyclerView.Adapter<SimilarRVAdapter.View
             public void onClick(View v) {
                 Intent intent = new Intent(context, moviedetails.class);
                 intent.putExtra("movieid",String.valueOf(movieSearchReturns.get(position).getId()));
+                intent.putExtra("user",user);
+                intent.putExtra("userid",userid);
                 context.startActivity(intent);
             }
         });

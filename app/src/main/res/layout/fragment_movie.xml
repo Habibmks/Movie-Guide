@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginLeft="64dp"
-        android:text="Button"
+        android:text="Search"
         app:layout_constraintStart_toEndOf="@+id/etmoviesearchfragment"
         app:layout_constraintTop_toTopOf="@+id/etmoviesearchfragment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

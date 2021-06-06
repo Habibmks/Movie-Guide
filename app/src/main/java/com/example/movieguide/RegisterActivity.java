@@ -31,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = getIntent();
         auth = new Authentication(this);
         if(intent.hasExtra("user_email")){
-            str = intent.getStringExtra("user_email").toString();
+            str = intent.getStringExtra("user_email");
         }else {
             str = "intent bos";
             testview.setText(str);
@@ -42,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
                 register();
             }
         });
+        email = findViewById(R.id.editTextTextEmailAddress2);
+        email.setText(str);
     }
 
 

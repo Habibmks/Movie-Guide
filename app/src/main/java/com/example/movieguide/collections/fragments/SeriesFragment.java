@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.movieguide.R;
 import com.example.movieguide.apifunc;
 import com.example.movieguide.collections.SeriesRVAdapter;
 import com.example.movieguide.collections.Shows.Shows;
+import com.example.movieguide.collections.User.User;
 
 import java.util.List;
 
@@ -26,9 +28,13 @@ public class SeriesFragment extends Fragment {
     private RecyclerView.Adapter rAdapter;
     private RecyclerView.LayoutManager layoutManager;
     Context context;
-    public SeriesFragment(Context context) {
+    User user;
+    String userid;
+    public SeriesFragment(Context context,User user,String userid) {
         // Required empty public constructor
         this.context = context;
+        this.user = user;
+        this.userid = userid;
     }
 
 
@@ -49,6 +55,20 @@ public class SeriesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
+        apifunc apifunc = new apifunc();
+        apifunc.popseries(context, new apifunc.popserieslistener() {
+            @Override
+            public void onResponse(List<Shows> list) {
+                rAdapter = new SeriesRVAdapter(context,list,userid);
+                recyclerView.setAdapter(rAdapter);
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.d("SeriesFragment",message);
+
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +87,7 @@ public class SeriesFragment extends Fragment {
 
             @Override
             public void onResponse(List<Shows> showsList) {
-                rAdapter = new SeriesRVAdapter(context,showsList);
+                rAdapter = new SeriesRVAdapter(context,showsList,userid);
                 recyclerView.setAdapter(rAdapter);
             }
         });

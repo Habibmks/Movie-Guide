@@ -1,6 +1,7 @@
 package com.example.movieguide.collections.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.movieguide.HomeActivity;
+import com.example.movieguide.Profile;
 import com.example.movieguide.R;
 import com.example.movieguide.Test;
 import com.example.movieguide.collections.User.User;
@@ -19,11 +22,13 @@ import com.example.movieguide.collections.User.User;
 public class ProfileFragment extends Fragment {
     Context context;
     User user;
+    String userid;
 
-    public ProfileFragment(Context context,User user) {
+    public ProfileFragment(Context context,User user,String userid) {
         // Required empty public constructor
         this.context = context;
         this.user = user;
+        this.userid = userid;
     }
 
 
@@ -52,12 +57,34 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        btnfavmov.setOnClickListener(v1 -> {
+            favmovie();
 
+        });
+        btnprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profile();
+            }
+        });
 
         return v;
     }
 
     public void logout(){
 
+    }
+    public void favmovie(){
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra("title","Movies");
+        intent.putExtra("userid",userid);
+        intent.putExtra("user",user);
+        startActivity(intent);
+    }
+    public void profile(){
+        Intent intent = new Intent(context, Profile.class);
+        intent.putExtra("user",user);
+        intent.putExtra("userid",userid);
+        startActivity(intent);
     }
 }

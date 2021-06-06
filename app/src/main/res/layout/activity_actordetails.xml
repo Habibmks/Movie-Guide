@@ -38,7 +38,7 @@
     <TextView
         android:id="@+id/tvadbiography"
         android:layout_width="348dp"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -48,8 +48,21 @@
     <TextView
         android:id="@+id/tvadknownnames"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
         app:layout_constraintStart_toStartOf="@+id/tvadbiography"
-        app:layout_constraintTop_toBottomOf="@+id/tvadbiography" />
+        app:layout_constraintTop_toBottomOf="@+id/tvadbiography"
+        tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btnaddactorfav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginLeft="76dp"
+        android:layout_marginTop="24dp"
+        android:text="Add"
+        app:layout_constraintStart_toEndOf="@+id/ivactordetails"
+        app:layout_constraintTop_toBottomOf="@+id/tvadage" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

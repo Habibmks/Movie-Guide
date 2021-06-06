@@ -21,10 +21,12 @@ public class SeriesRVAdapter extends RecyclerView.Adapter<SeriesRVAdapter.ViewHo
 
     List<Shows> showlist;
     Context context;
+    String userid;
 
-    public SeriesRVAdapter(Context context,List<Shows> showlist){
+    public SeriesRVAdapter(Context context,List<Shows> showlist,String userid){
         this.context = context;
         this.showlist = showlist;
+        this.userid = userid;
     }
     @NonNull
     @Override

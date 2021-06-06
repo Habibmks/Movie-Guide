@@ -36,52 +36,65 @@ public class MainActivity extends AppCompatActivity {
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final EditText logpass = (EditText) findViewById(R.id.editTextTextPassword);
         final TextView tverror = (TextView) findViewById(R.id.textView2);
+        Button btnpass = findViewById(R.id.btnforgetpass);
 
 
+        login.setOnClickListener(v -> {
+            Authentication auth = new Authentication(MainActivity.this);
+            auth.Login(logemail.getText().toString(), logpass.getText().toString(), new Authentication.login() {
+                @Override
+                public void onError(String message) {
+                    Log.d("Sign in Error",message);
+                    Toast.makeText(MainActivity.this,"The password is wrong",Toast.LENGTH_SHORT).show();
+                }
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                auth.signInWithEmailAndPassword(logemail.getText().toString(),logpass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(MainActivity.this,"Giriş başarılı",Toast.LENGTH_SHORT);
-                            Log.d("Sign in","Signed in Succesfully");
-                            Intent intent = new Intent(MainActivity.this,Test.class);
-                            String id = auth.getCurrentUser().getUid().toString();
-                            db.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    user = documentSnapshot.toObject(User.class);
-                                    Log.d("Firebase get","User's name" + user.getName());
-                                    intent.putExtra("user",user);
-                                    startActivity(intent);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("Firestore Read",e.getMessage().toString());
-                                }
-                            });
-
-                        }else{
-                            Toast.makeText(MainActivity.this,"Hatalı giriş",Toast.LENGTH_SHORT);
-                            Log.d("Sign in","Couldn't sign in");
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Sign in Failure",e.getMessage().toString());
-                    }
-                });
-            }
+                @Override
+                public void onResponse(User user) {
+                    Intent intent = new Intent(MainActivity.this,Test.class);
+                    intent.putExtra("user",user);
+                    intent.putExtra("userid",auth.getAuth().getCurrentUser().getUid());
+                    startActivity(intent);
+                }
+            });
+//                FirebaseAuth auth = FirebaseAuth.getInstance();
+//                FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                auth.signInWithEmailAndPassword(logemail.getText().toString(),logpass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()){
+//                            Toast.makeText(MainActivity.this,"Giriş başarılı",Toast.LENGTH_SHORT);
+//                            Log.d("Sign in","Signed in Succesfully");
+//                            Intent intent = new Intent(MainActivity.this,Test.class);
+//                            String id = auth.getCurrentUser().getUid().toString();
+//                            db.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                    user = documentSnapshot.toObject(User.class);
+//                                    Log.d("Firebase get","User's name" + user.getName());
+//                                    intent.putExtra("user",user);
+//                                    startActivity(intent);
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Log.d("Firestore Read",e.getMessage().toString());
+//                                }
+//                            });
+//
+//                        }else{
+//                            Toast.makeText(MainActivity.this,"Hatalı giriş",Toast.LENGTH_SHORT);
+//                            Log.d("Sign in","Couldn't sign in");
+//                        }
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.d("Sign in Failure",e.getMessage().toString());
+//                    }
+//                });
         });
-        logemail.setText("qwe@gmail.com");
-        logpass.setText("qweasd123");
+//        logemail.setText("qwe@gmail.com");
+//        logpass.setText("qweasd123");
         toregbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,22 +113,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        /*login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login(tverror);
+        btnpass.setOnClickListener(v -> {
+            if (logemail.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Please enter mail", Toast.LENGTH_SHORT);
+            } else {
+                reset(logemail.getText().toString());
             }
-        });*/
+        });
     }
     public void register(){
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final TextView testtv = (TextView) findViewById(R.id.WellcomeTv) ;
-
     }
     public void login(TextView tv){
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final EditText logpassw = (EditText) findViewById(R.id.editTextTextPassword);
-
         String email = logemail.getText().toString(), password = logpassw.getText().toString();
 
         if (email.equals("admin") && password.equals("admin")){
@@ -123,5 +135,11 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("email",email);
             startActivity(intent);
         }else tv.setText("Username or Password is wrong");
+    }
+    public void reset(String mail){
+        Authentication auth = new Authentication(MainActivity.this);
+        auth.forgetpassword(mail, bool -> {
+            Toast.makeText(MainActivity.this,bool ? "Mail sent":"Failed",Toast.LENGTH_SHORT).show();
+        });
     }
 }
