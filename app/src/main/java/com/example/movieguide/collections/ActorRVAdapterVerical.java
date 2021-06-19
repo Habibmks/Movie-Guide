@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.movieguide.Actordetails;
 import com.example.movieguide.R;
 import com.example.movieguide.collections.Actors.Actors;
+import com.example.movieguide.collections.User.User;
 
 import java.util.List;
 
@@ -23,10 +24,12 @@ public class ActorRVAdapterVerical extends RecyclerView.Adapter<ActorRVAdapterVe
     Context context;
     List<Actors> actorsList;
     String userid;
-    public ActorRVAdapterVerical(List<Actors> actorsList,Context context,String userid){
+    User user;
+    public ActorRVAdapterVerical(List<Actors> actorsList,Context context,String userid,User user){
         this.actorsList = actorsList;
         this.context = context;
         this.userid = userid;
+        this.user = user;
     }
 
     @NonNull
@@ -44,6 +47,13 @@ public class ActorRVAdapterVerical extends RecyclerView.Adapter<ActorRVAdapterVe
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(context, Actordetails.class);
             intent.putExtra("id",String.valueOf(actorsList.get(position).getId()));
+            intent.putExtra("userid",userid);
+            context.startActivity(intent);
+        });
+        holder.layout.setOnClickListener(v -> {
+            Intent intent = new Intent(context,Actordetails.class);
+            intent.putExtra("actorid",actorsList.get(position).getId());
+            intent.putExtra("user",user);
             intent.putExtra("userid",userid);
             context.startActivity(intent);
         });

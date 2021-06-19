@@ -1,35 +1,20 @@
 package com.example.movieguide;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.movieguide.Firebase.Authentication;
+import com.example.movieguide.Firebase.Firestore;
 import com.example.movieguide.Functions.Functions;
 import com.example.movieguide.collections.User.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +29,35 @@ public class MainActivity extends AppCompatActivity {
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final EditText logpass = (EditText) findViewById(R.id.editTextTextPassword);
         Button btnpass = findViewById(R.id.btnforgetpass);
+        Authentication auth = new Authentication(getApplicationContext());
+        auth.checkuser(new Authentication.chcuser() {
+            @Override
+            public void onResponse(String userid) {
+                if (!userid.isEmpty()){
+                    Firestore db = new Firestore(userid);
+                    db.login(new Firestore.login() {
+                        @Override
+                        public void onError(String message) {
+                            Log.d("Auto login",message);
+                        }
+
+                        @Override
+                        public void onResponse(User user) {
+                            Intent intent = new Intent(getApplicationContext(), Test.class);
+                            intent.putExtra("user", user);
+                            intent.putExtra("userid", auth.getAuth().getCurrentUser().getUid());
+                            startActivity(intent);
+                        }
+                    });
+                }else Log.d("First login","There is no signed in user");
+            }
+
+            @Override
+            public void onError(String messge) {
+                Log.d("Auto login","There is no signed in user");
+            }
+        });
+
 
         login.setOnClickListener(v -> {
 

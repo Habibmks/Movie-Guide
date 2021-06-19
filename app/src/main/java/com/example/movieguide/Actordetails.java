@@ -18,7 +18,7 @@ public class Actordetails extends AppCompatActivity {
     String id;
     ImageView imageView;
     TextView name,age,biography,othernames;
-
+    Button fav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +28,7 @@ public class Actordetails extends AppCompatActivity {
         age = findViewById(R.id.tvadage);
         biography = findViewById(R.id.tvadbiography);
         othernames = findViewById(R.id.tvadknownnames);
+        fav = findViewById(R.id.btnaddactorfav);
         apifunc func = new apifunc();
         Intent intent = getIntent();
         try {
@@ -36,7 +37,6 @@ public class Actordetails extends AppCompatActivity {
             id = "6384";
             e.printStackTrace();
         }
-        Button fav = findViewById(R.id.btnaddactorfav);
         fav.setOnClickListener(v -> fav.setText(fav.getText().toString().equals("Add") ? "Remove":"Add"));
         func.actordetails(id, Actordetails.this, new apifunc.getactordetails() {
             @Override

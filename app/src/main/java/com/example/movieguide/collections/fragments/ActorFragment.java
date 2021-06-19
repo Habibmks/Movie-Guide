@@ -59,7 +59,7 @@ public class ActorFragment extends Fragment {
         apifunc.popactors(context, new apifunc.popactorlistener() {
             @Override
             public void onResponse(List<Actors> list) {
-                rAdapter = new ActorRVAdapterVerical(list,context,userid);
+                rAdapter = new ActorRVAdapterVerical(list,context,userid,user);
                 recyclerView.setAdapter(rAdapter);
             }
 
@@ -81,7 +81,7 @@ public class ActorFragment extends Fragment {
 
             @Override
             public void onResponse(List<Actors> actors) {
-                rAdapter = new ActorRVAdapterVerical(actors,context,userid);
+                rAdapter = new ActorRVAdapterVerical(actors,context,userid,user);
                 recyclerView.setAdapter(rAdapter);
             }
         });

@@ -88,4 +88,13 @@ public class Authentication {
             }
         });
     }
+    public interface chcuser{
+        void onResponse(String userid);
+        void onError(String messge);
+    }
+    public void checkuser(chcuser listener){
+        if (auth.getCurrentUser() != null) {
+            listener.onResponse(auth.getCurrentUser().getUid());
+        }else listener.onError("There is signed in user");
+    }
 }

@@ -21,7 +21,6 @@ public class Functions {
             MainActivity.error = 0;
             return false;
         }
-
         return true;
     }
 

@@ -4,11 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.movieguide.collections.User.Favorites;
 import com.example.movieguide.collections.User.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,7 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Firestore {
@@ -29,12 +25,7 @@ public class Firestore {
 
     public void Register(User user){
         Log.d("user",user.getName());
-        firestore.collection("Users").document(userid).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.d("Firestore Register", user.getName() + " is added");
-            }
-        });
+        firestore.collection("Users").document(userid).set(user).addOnCompleteListener(task -> Log.d("Firestore Register", user.getName() + " is added"));
     }
     public interface login{
         void onError(String message);
