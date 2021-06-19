@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.movieguide.Firebase.Firestore;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.ActorRVAdapter;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.Movies.MovieDetails;

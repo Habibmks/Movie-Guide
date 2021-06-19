@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.movieguide.R;
-import com.example.movieguide.apifunc;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.ActorRVAdapterVerical;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.User.User;
@@ -68,12 +68,7 @@ public class ActorFragment extends Fragment {
 
             }
         });
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actorsearch(name.getText().toString());
-            }
-        });
+        btn.setOnClickListener(v1 -> actorsearch(name.getText().toString()));
         return v;
     }
     public void actorsearch(String name){

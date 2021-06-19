@@ -59,13 +59,10 @@ public class Actors {
         this.popularity = popularity;
     }
 
-    public static Comparator<Actors> popularitycomparator = new Comparator<Actors>() {
-        @Override
-        public int compare(Actors a1, Actors a2) {
-            //sort actors by their popularity
-            Float.compare(a1.getPopularity(),a2.getPopularity());
-            return 0;
-        }
+    public static Comparator<Actors> popularitycomparator = (a1, a2) -> {
+        //sort actors by their popularity
+        Float.compare(a1.getPopularity(),a2.getPopularity());
+        return 0;
     };
     public static String gender(int i){
         switch (i){

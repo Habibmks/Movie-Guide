@@ -18,19 +18,23 @@ public class Authentication {
     FirebaseAuth auth;
     Firestore db;
     Context context;
-    static Boolean rtn=false;
     public Authentication(Context context) {
 
         auth = FirebaseAuth.getInstance();
         this.context = context;
     }
-    public void Register(String mail,String password,User user){
-        auth.createUserWithEmailAndPassword(mail,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                db = new Firestore(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                db.Register(user);
-            }
+    public interface register{
+        void onError(String message);
+        void onResponse(User user);
+    }
+    public void Register(String mail,String password,User user,register listener){
+        auth.createUserWithEmailAndPassword(mail,password).addOnSuccessListener(authResult -> {
+            db = new Firestore(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            db.Register(user);
+            listener.onResponse(user);
+            Log.d("success creation",user.getName());
+        }).addOnFailureListener(e -> {
+            listener.onError(e.getMessage());
         });
     }
     public interface login{
@@ -40,30 +44,22 @@ public class Authentication {
     public void Login(String email,String password,login listener){
 
         auth.signInWithEmailAndPassword(email,password)
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                Log.d("Sign in","Signed in Successfully");
-                db = new Firestore(auth.getCurrentUser().getUid().toString());
-                db.login(new Firestore.login() {
-                    @Override
-                    public void onError(String message) {
-                        listener.onError("Firestore " + message);
-                    }
+                .addOnSuccessListener(authResult -> {
+                    Log.d("Sign in","Signed in Successfully");
+                    db = new Firestore(auth.getCurrentUser().getUid());
+                    db.login(new Firestore.login() {
+                        @Override
+                        public void onError(String message) {
+                            listener.onError("Firestore " + message);
+                        }
 
-                    @Override
-                    public void onResponse(User user) {
-                        listener.onResponse(user);
-                    }
-                });
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.onError("Auth " + e.getMessage().toString());
-            }
-        });
+                        @Override
+                        public void onResponse(User user) {
+                            listener.onResponse(user);
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> listener.onError("Auth " + e.getMessage()));
     }
     public FirebaseAuth getAuth() {
         return auth;
@@ -73,14 +69,23 @@ public class Authentication {
     }
     public void resetpassword(String password,resetpass listener){
         auth.getCurrentUser().updatePassword(password).addOnCompleteListener(task -> {
-            listener.onResponse(task.isSuccessful() ? true:false);
+            listener.onResponse(task.isSuccessful());
             Log.d("resetreturn",task.isSuccessful() ? "true":"false");
         });
     }
     public interface forgetpass{
         void onResponse(Boolean bool);
+        void onError(String message);
     }
     public void forgetpassword(String mail,forgetpass listener){
-        auth.sendPasswordResetEmail(mail).addOnCompleteListener(task -> { listener.onResponse(task.isSuccessful() ? true:false); });
+        auth.sendPasswordResetEmail(mail).addOnSuccessListener(aVoid -> {
+            listener.onResponse(true);
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("forgetpassword",e.getMessage());
+                listener.onError(e.getMessage());
+            }
+        });
     }
 }

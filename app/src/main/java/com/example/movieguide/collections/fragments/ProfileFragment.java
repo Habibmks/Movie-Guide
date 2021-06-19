@@ -17,6 +17,7 @@ import com.example.movieguide.Profile;
 import com.example.movieguide.R;
 import com.example.movieguide.Test;
 import com.example.movieguide.collections.User.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class ProfileFragment extends Fragment {
@@ -50,23 +51,16 @@ public class ProfileFragment extends Fragment {
         Button btnfavser = v.findViewById(R.id.btnfavseries);
         Button btnfavact = v.findViewById(R.id.btnfavactors);
         Button btnlogout = v.findViewById(R.id.btnlogout);
-        btnlogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-                getActivity().finish();
-            }
+        btnlogout.setOnClickListener(v12 -> {
+            logout();
+            FirebaseAuth.getInstance().signOut();
+            getActivity().finish();
         });
         btnfavmov.setOnClickListener(v1 -> {
             favmovie();
 
         });
-        btnprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profile();
-            }
-        });
+        btnprofile.setOnClickListener(v13 -> profile());
 
         return v;
     }

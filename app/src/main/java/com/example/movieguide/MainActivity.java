@@ -3,7 +3,12 @@ package com.example.movieguide;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.movieguide.Firebase.Authentication;
+import com.example.movieguide.Functions.Functions;
 import com.example.movieguide.collections.User.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,8 +31,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
+
 public class MainActivity extends AppCompatActivity {
-    User user;
+
+    static public int error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,111 +43,45 @@ public class MainActivity extends AppCompatActivity {
         final Button toregbtn = (Button) findViewById(R.id.logtoregbtn);
         final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
         final EditText logpass = (EditText) findViewById(R.id.editTextTextPassword);
-        final TextView tverror = (TextView) findViewById(R.id.textView2);
         Button btnpass = findViewById(R.id.btnforgetpass);
 
-
         login.setOnClickListener(v -> {
-            Authentication auth = new Authentication(MainActivity.this);
-            auth.Login(logemail.getText().toString(), logpass.getText().toString(), new Authentication.login() {
-                @Override
-                public void onError(String message) {
-                    Log.d("Sign in Error",message);
-                    Toast.makeText(MainActivity.this,"The password is wrong",Toast.LENGTH_SHORT).show();
-                }
 
-                @Override
-                public void onResponse(User user) {
-                    Intent intent = new Intent(MainActivity.this,Test.class);
-                    intent.putExtra("user",user);
-                    intent.putExtra("userid",auth.getAuth().getCurrentUser().getUid());
-                    startActivity(intent);
-                }
-            });
-//                FirebaseAuth auth = FirebaseAuth.getInstance();
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                auth.signInWithEmailAndPassword(logemail.getText().toString(),logpass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()){
-//                            Toast.makeText(MainActivity.this,"Giriş başarılı",Toast.LENGTH_SHORT);
-//                            Log.d("Sign in","Signed in Succesfully");
-//                            Intent intent = new Intent(MainActivity.this,Test.class);
-//                            String id = auth.getCurrentUser().getUid().toString();
-//                            db.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                                @Override
-//                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                    user = documentSnapshot.toObject(User.class);
-//                                    Log.d("Firebase get","User's name" + user.getName());
-//                                    intent.putExtra("user",user);
-//                                    startActivity(intent);
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Log.d("Firestore Read",e.getMessage().toString());
-//                                }
-//                            });
-//
-//                        }else{
-//                            Toast.makeText(MainActivity.this,"Hatalı giriş",Toast.LENGTH_SHORT);
-//                            Log.d("Sign in","Couldn't sign in");
-//                        }
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d("Sign in Failure",e.getMessage().toString());
-//                    }
-//                });
-        });
-//        logemail.setText("qwe@gmail.com");
-//        logpass.setText("qweasd123");
-        toregbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (logemail.getText().toString().isEmpty()){
-                    Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
-                    intent.putExtra("user_email","");
-                    startActivity(intent);
-                    /*Toast t = Toast.makeText(getApplicationContext(),"Email bos",Toast.LENGTH_SHORT);
-                    t.show();*/
+            if(!Functions.isConnected(this)){
+                Toast.makeText(MainActivity.this,"There is no connection",Toast.LENGTH_SHORT).show();
+            }else {
+                if(Functions.veriflogin(logemail.getText().toString(),logpass.getText().toString(),getApplicationContext())) {
+                    Functions.login(logemail.getText().toString(), logpass.getText().toString(), MainActivity.this);
                 }else{
-                    Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
-                    intent.putExtra("user_email",logemail.getText().toString());
-                    startActivity(intent);
-                    /*Toast t = Toast.makeText(getApplicationContext(),logemail.getText().toString(),Toast.LENGTH_SHORT);
-                    t.show();*/
+                    if (error==0){
+                        logemail.requestFocus();
+                    }else if(error==1) {
+                        logpass.requestFocus();
+                    }
                 }
+            }
+        });
+
+        toregbtn.setOnClickListener(v -> {
+            if (logemail.getText().toString().isEmpty()){
+                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+                intent.putExtra("user_email","");
+                startActivity(intent);
+
+            }else{
+                Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+                intent.putExtra("user_email",logemail.getText().toString());
+                startActivity(intent);
+
             }
         });
         btnpass.setOnClickListener(v -> {
             if (logemail.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Please enter mail", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Please enter mail", Toast.LENGTH_SHORT).show();
             } else {
-                reset(logemail.getText().toString());
+                Functions.reset(logemail.getText().toString(),MainActivity.this);
             }
         });
     }
-    public void register(){
-        final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
-        final TextView testtv = (TextView) findViewById(R.id.WellcomeTv) ;
-    }
-    public void login(TextView tv){
-        final EditText logemail = (EditText) findViewById(R.id.editTextTextEmailAddress);
-        final EditText logpassw = (EditText) findViewById(R.id.editTextTextPassword);
-        String email = logemail.getText().toString(), password = logpassw.getText().toString();
 
-        if (email.equals("admin") && password.equals("admin")){
-            Intent intent = new Intent(this,Test.class);
-            intent.putExtra("email",email);
-            startActivity(intent);
-        }else tv.setText("Username or Password is wrong");
-    }
-    public void reset(String mail){
-        Authentication auth = new Authentication(MainActivity.this);
-        auth.forgetpassword(mail, bool -> {
-            Toast.makeText(MainActivity.this,bool ? "Mail sent":"Failed",Toast.LENGTH_SHORT).show();
-        });
-    }
 }

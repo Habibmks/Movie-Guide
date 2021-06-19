@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.example.movieguide.Firebase.Authentication;
 import com.example.movieguide.Firebase.Firestore;
+import com.example.movieguide.Functions.Functions;
 import com.example.movieguide.collections.User.User;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    static public int error;
     String str = "", toast="";
     Button registerbtn;
     EditText name,surname,username,email,password,repassword;
@@ -57,43 +60,30 @@ public class RegisterActivity extends AppCompatActivity {
         repassword = findViewById(R.id.editTextTextPassword3);
         sname = name.getText().toString(); ssurname = surname.getText().toString(); susername = username.getText().toString(); semail = email.getText().toString();
         spassword = password.getText().toString(); srepassword = repassword.getText().toString();
-        boolean rtn = false;
-        if (sname.isEmpty() || ssurname.isEmpty() || susername.isEmpty() || semail.isEmpty() || spassword.isEmpty() || srepassword.isEmpty()){
-            toast = "There are empty fields";
-            Toast t = Toast.makeText(getApplicationContext(),toast,Toast.LENGTH_SHORT);
-            t.show();
-        }else if(!spassword.equals(srepassword)){
-            toast = "Passwords are not matched";
-            Toast t = Toast.makeText(getApplicationContext(),toast,Toast.LENGTH_SHORT);
-            t.show();
-        }else rtn = true;
-        if(rtn){
-            User user = new User(semail,spassword,sname,ssurname,susername);
-            auth.Register(semail,spassword,user);
-//            Toast t = Toast.makeText(getApplicationContext(),"Everything is true",Toast.LENGTH_SHORT);
-//            t.show();
-//            mAuth = FirebaseAuth.getInstance();
-//            mAuth.createUserWithEmailAndPassword(semail,spassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                @Override
-//                public void onComplete(@NonNull Task<AuthResult> task) {
-//                    if (task.isSuccessful()){
-//                        User user = new User(semail,spassword,sname,ssurname,susername);
-//                        db.collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()){
-//                                    Toast.makeText(RegisterActivity.this,susername+"is added",Toast.LENGTH_SHORT).show();
-//                                }else {
-//                                    Log.d(getAttributionTag(), "firestone hatasi");
-//                                }
-//                            }
-//                        });
-//                    }else {
-//                        Log.d(getAttributionTag(), "auth hatasi");
-//                    }
-//                }
-//            });
-        }
+        if(!Functions.isConnected(getApplicationContext())) {
+            Toast.makeText(getApplicationContext(),"There is no connection",Toast.LENGTH_SHORT).show();
+        }else{
+            if (Functions.verifregis(sname, ssurname, susername, semail, spassword, srepassword, getApplicationContext())) {
+                User user = new User(semail, spassword, sname, ssurname, susername);
+                auth.Register(semail, spassword, user, new Authentication.register() {
+                    @Override
+                    public void onError(String message) {
+                        if(message.equals("The email address is badly formatted.")){
+                            Toast.makeText(getApplicationContext(),"Email is not valid",Toast.LENGTH_SHORT).show();
 
+                        }
+                    }
+                    @Override
+                    public void onResponse(User user) {
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        intent.putExtra("email",semail);
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                if (error == 0) name.requestFocus(); else if (error == 1) surname.requestFocus(); else if (error == 2) username.requestFocus(); else
+                    if (error == 3) email.requestFocus(); else if (error == 4) password.requestFocus(); else if (error == 5) repassword.requestFocus();
+            }
+        }
     }
 }

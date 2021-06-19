@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.User.User;
 
 import java.util.List;

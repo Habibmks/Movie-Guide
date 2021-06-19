@@ -6,18 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.movieguide.Firebase.Firestore;
-import com.example.movieguide.collections.Movies.MovieDetails;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.User.User;
 
 import java.util.ArrayList;

@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.movieguide.R;
-import com.example.movieguide.apifunc;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.SeriesRVAdapter;
 import com.example.movieguide.collections.Shows.Shows;
 import com.example.movieguide.collections.User.User;
@@ -69,12 +69,7 @@ public class SeriesFragment extends Fragment {
 
             }
         });
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchshows(name.getText().toString());
-            }
-        });
+        btn.setOnClickListener(v1 -> searchshows(name.getText().toString()));
         return v;
     }
     public void searchshows(String name){

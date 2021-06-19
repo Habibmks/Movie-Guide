@@ -17,8 +17,7 @@ import android.widget.EditText;
 import com.example.movieguide.MovieSearchReturn;
 import com.example.movieguide.R;
 import com.example.movieguide.RecyclerViewAdapter;
-import com.example.movieguide.Test;
-import com.example.movieguide.apifunc;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.User.User;
 
 import java.util.List;
@@ -67,12 +66,7 @@ public class MovieFragment extends Fragment {
                 Log.d("Movie Fragment create",message);
             }
         });
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                search(v,name.getText().toString());
-            }
-        });
+        btn.setOnClickListener(v1 -> search(v1,name.getText().toString()));
 
         return  v;
     }

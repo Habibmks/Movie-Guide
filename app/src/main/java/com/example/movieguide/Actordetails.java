@@ -7,11 +7,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.Actors.ActorDetails;
 
 public class Actordetails extends AppCompatActivity {
@@ -37,9 +37,7 @@ public class Actordetails extends AppCompatActivity {
             e.printStackTrace();
         }
         Button fav = findViewById(R.id.btnaddactorfav);
-        fav.setOnClickListener(v -> {
-            fav.setText(fav.getText().toString().equals("Add") ? "Remove":"Add");
-        });
+        fav.setOnClickListener(v -> fav.setText(fav.getText().toString().equals("Add") ? "Remove":"Add"));
         func.actordetails(id, Actordetails.this, new apifunc.getactordetails() {
             @Override
             public void onError(String message) {
