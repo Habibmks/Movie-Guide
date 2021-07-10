@@ -17,7 +17,9 @@ import com.example.movieguide.collections.Actors.ActorDetails;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.Movies.MovieDetails;
 import com.example.movieguide.collections.Shows.Shows;
+import com.example.movieguide.collections.Shows.showdetails;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +38,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(List<MovieSearchReturn> movieSearchReturns);
     }
-
+    //searches movies by name
     public void moviesearch(String query, String page, Context context, moviesearchlistener listener){
 
         String url="https://api.themoviedb.org/3/search/movie";
@@ -47,9 +49,7 @@ public class apifunc {
         if(apiquery.equals("&query=")) apiquery="&query=fight";
         if(apipage.equals("&page=")) apipage="&page=1";
         url += apiquery + apipage;
-
         List<MovieSearchReturn> rtn = new ArrayList<>();
-
          JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
              try {
                  JSONArray array = response.getJSONArray("results");
@@ -78,6 +78,7 @@ public class apifunc {
         void onResponse(List<MovieSearchReturn> list);
         void onError(String message);
     }
+    //gets popular movies
     public void popmovies(Context context,popmovielistener listener){
         String url = "https://api.themoviedb.org/3/movie/popular";
         url += key;
@@ -106,6 +107,7 @@ public class apifunc {
         void onResponse(List<Actors> list);
         void onError(String message);
     }
+    //gets popular actors
     public void popactors(Context context,popactorlistener listener){
         String url = "https://api.themoviedb.org/3/person/popular";
         url += key;
@@ -131,6 +133,7 @@ public class apifunc {
         void onResponse(List<Shows> list);
         void onError(String message);
     }
+    //gets popular series
     public void popseries(Context context, popserieslistener listener){
         String url = "https://api.themoviedb.org/3/tv/popular";
         url += key;
@@ -161,7 +164,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(MovieDetails movieDetails);
     }
-
+    //gets movie's detailed information
     public void getmoviedetails(String id,Context context, moviedetailslistener listener){
 
         String url = "https://api.themoviedb.org/3/movie/";
@@ -201,7 +204,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(MovieSearchReturn movieSearchReturn);
     }
-
+    //gets movies details by id
     public void moviebyid(Context context,List<String> list, idmovielistener listener) throws InterruptedException {
         Log.d("idlistfunc",list.toString());
         List<MovieSearchReturn> rtn = new ArrayList<>();
@@ -249,6 +252,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(List<Actors> actors);
     }
+    //gets actors by id for detailed information
     public void getactors(String id,Context context,getactorslistener listener){
         String url = "https://api.themoviedb.org/3/movie/";
         url = url + id + "/credits" + key;
@@ -275,6 +279,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(List<MovieSearchReturn> movieSearchReturns);
     }
+    //gets similar movies by movie id
     public void getsimilars(String id,Context context,getsimilars listener){
         String url = "https://api.themoviedb.org/3/movie/";
         url = url + id + "/similar" + key;
@@ -303,6 +308,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(ActorDetails actorDetails);
     }
+    //gets actors detailed information by id
     public void actordetails (String id,Context context,getactordetails listener){
         String url = "https://api.themoviedb.org/3/person/";
         url = url + id + key;
@@ -338,6 +344,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(List<Actors> actors);
     }
+    //gets list of actors by name
     public void actorsearch(String name,Context context,actorsearchlistener listener){
         String url = "https://api.themoviedb.org/3/search/person";
         String query = "&query=" + name;
@@ -364,6 +371,7 @@ public class apifunc {
         void onError(String message);
         void onResponse(List<Shows> showsList);
     }
+    //gets list of series by name
     public void showsearch(String name,Context context,showsearchlistener listener){
         String url = "https://api.themoviedb.org/3/search/tv";
         String query = "&query=" + name;
@@ -389,7 +397,42 @@ public class apifunc {
         }, error -> error.printStackTrace());
         Singleton.getInstance(context).addToRequestQueue(request);
     }
+    public interface seriesdetailslistener{
+        void onError(String message);
+        void onResponse(showdetails showdetails);
+    }
+    public void seriesdetails(String id, Context context,seriesdetailslistener listener){
+        String url = "https://api.themoviedb.org/3/tv/";
+        url = url + id + key;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET , url, null,response -> {
+           try{
+               JSONArray array = response.getJSONArray("genres");
+               String[] genres = new String[array.length()];
+               for (int i = 0;i<array.length();i++){
+                   JSONObject object = array.getJSONObject(i);
+                   genres[i] = object.getString("id");
+               }
 
+               showdetails details = new showdetails(
+                       response.getInt("id"),
+                       array.length(),
+                       genres,
+                       response.getString("name"),
+                       response.getString("overview"),
+                       response.getString("poster_path"),
+                       response.getString("original_name"),
+                       response.getString("first_air_date"),
+                       response.getString("status")
+                       );
+               listener.onResponse(details);
+           } catch (JSONException e){
+               e.printStackTrace();
+           }
+        }, error -> {
+            listener.onError(error.getMessage());
+        });
+        Singleton.getInstance(context).addToRequestQueue(request);
+    }
     //function that checks JSON array parameters exist
     public static MovieSearchReturn movieobjectcontroller (JSONObject view,JSONArray array) throws JSONException {
         MovieSearchReturn movies = null;

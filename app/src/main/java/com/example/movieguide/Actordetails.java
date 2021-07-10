@@ -13,9 +13,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.movieguide.Functions.apifunc;
 import com.example.movieguide.collections.Actors.ActorDetails;
+import com.example.movieguide.collections.User.User;
 
 public class Actordetails extends AppCompatActivity {
     String id;
+    User user;
+    String userid;
     ImageView imageView;
     TextView name,age,biography,othernames;
     Button fav;
@@ -31,12 +34,9 @@ public class Actordetails extends AppCompatActivity {
         fav = findViewById(R.id.btnaddactorfav);
         apifunc func = new apifunc();
         Intent intent = getIntent();
-        try {
-            id = intent.getStringExtra("id");
-        } catch (Exception e) {
-            id = "6384";
-            e.printStackTrace();
-        }
+        if (!intent.hasExtra("id")) id = "6384"; else id = intent.getStringExtra("id");
+        user = (User) intent.getSerializableExtra("user");
+        userid = intent.getStringExtra("userid");
         fav.setOnClickListener(v -> fav.setText(fav.getText().toString().equals("Add") ? "Remove":"Add"));
         func.actordetails(id, Actordetails.this, new apifunc.getactordetails() {
             @Override

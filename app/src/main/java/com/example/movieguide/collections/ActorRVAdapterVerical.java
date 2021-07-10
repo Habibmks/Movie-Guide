@@ -2,6 +2,7 @@ package com.example.movieguide.collections;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class ActorRVAdapterVerical extends RecyclerView.Adapter<ActorRVAdapterVe
         });
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(context,Actordetails.class);
-            intent.putExtra("actorid",actorsList.get(position).getId());
+            intent.putExtra("id",String.valueOf(actorsList.get(position).getId()));
             intent.putExtra("user",user);
             intent.putExtra("userid",userid);
             context.startActivity(intent);
