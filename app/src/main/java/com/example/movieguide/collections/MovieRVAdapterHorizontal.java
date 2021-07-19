@@ -20,35 +20,35 @@ import com.example.movieguide.moviedetails;
 
 import java.util.List;
 
-public class SimilarRVAdapter extends RecyclerView.Adapter<SimilarRVAdapter.ViewHolder> {
+public class MovieRVAdapterHorizontal extends RecyclerView.Adapter<MovieRVAdapterHorizontal.ViewHolder> {
 
-
-    List<MovieSearchReturn> movieSearchReturns;
+    List<MovieSearchReturn> list;
     Context context;
     User user;
     String userid;
-    public SimilarRVAdapter(List<MovieSearchReturn> movieSearchReturns, Context context,User user,String userid) {
-        this.movieSearchReturns = movieSearchReturns;
+
+    public MovieRVAdapterHorizontal(List<MovieSearchReturn> list, Context context, User user, String userid) {
+        this.list = list;
         this.context = context;
         this.user = user;
         this.userid = userid;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.actorlayout, parent, false);
-
+                .inflate(R.layout.actorlayout,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvsimilar.setText(movieSearchReturns.get(position).getTitle());
-        Glide.with(this.context).load(movieSearchReturns.get(position).getPoster()).into(holder.ivsimilar);
+    public void onBindViewHolder(@NonNull MovieRVAdapterHorizontal.ViewHolder holder, int position) {
+        holder.tvsimilar.setText(list.get(position).getTitle());
+        Glide.with(this.context).load(list.get(position).getPoster()).into(holder.ivsimilar);
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(context, moviedetails.class);
-            intent.putExtra("movieid",String.valueOf(movieSearchReturns.get(position).getId()));
+            intent.putExtra("movieid",String.valueOf(list.get(position).getId()));
             intent.putExtra("user",user);
             intent.putExtra("userid",userid);
             context.startActivity(intent);
@@ -57,13 +57,14 @@ public class SimilarRVAdapter extends RecyclerView.Adapter<SimilarRVAdapter.View
 
     @Override
     public int getItemCount() {
-        return movieSearchReturns.size();
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivsimilar;
         TextView tvsimilar;
         ConstraintLayout layout;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivsimilar = itemView.findViewById(R.id.ivsimple);

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.movieguide.Firebase.Firestore;
@@ -45,6 +46,11 @@ public class HomeActivity extends AppCompatActivity {
                     idlist = list;
                     setlist(user,userid);
                 }
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.d("HomeActivity",message);
             }
         });
         Runnable runnable = new Runnable() {

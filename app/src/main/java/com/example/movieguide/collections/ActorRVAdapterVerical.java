@@ -51,13 +51,13 @@ public class ActorRVAdapterVerical extends RecyclerView.Adapter<ActorRVAdapterVe
             intent.putExtra("userid",userid);
             context.startActivity(intent);
         });
-        holder.layout.setOnClickListener(v -> {
-            Intent intent = new Intent(context,Actordetails.class);
-            intent.putExtra("id",String.valueOf(actorsList.get(position).getId()));
-            intent.putExtra("user",user);
-            intent.putExtra("userid",userid);
-            context.startActivity(intent);
-        });
+//        holder.layout.setOnClickListener(v -> {
+//            Intent intent = new Intent(context,Actordetails.class);
+//            intent.putExtra("id",String.valueOf(actorsList.get(position).getId()));
+//            intent.putExtra("user",user);
+//            intent.putExtra("userid",userid);
+//            context.startActivity(intent);
+//        });
     }
 
     @Override

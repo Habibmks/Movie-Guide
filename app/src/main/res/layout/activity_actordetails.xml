@@ -1,68 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Actordetails">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivactordetails"
-        android:layout_width="124dp"
-        android:layout_height="144dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvadname"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/ivactordetails"
-        app:layout_constraintTop_toTopOf="@+id/ivactordetails" />
+        tools:context=".Actordetails">
 
-    <TextView
-        android:id="@+id/tvadage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/tvadname"
-        app:layout_constraintTop_toBottomOf="@+id/tvadname" />
+        <ImageView
+            android:id="@+id/ivactordetails"
+            android:layout_width="124dp"
+            android:layout_height="144dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tvadbiography"
-        android:layout_width="348dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/ivactordetails"
-        app:layout_constraintTop_toBottomOf="@+id/ivactordetails" />
+        <TextView
+            android:id="@+id/tvadname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@+id/ivactordetails"
+            app:layout_constraintTop_toTopOf="@+id/ivactordetails" />
 
-    <TextView
-        android:id="@+id/tvadknownnames"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        app:layout_constraintStart_toStartOf="@+id/tvadbiography"
-        app:layout_constraintTop_toBottomOf="@+id/tvadbiography"
-        tools:visibility="invisible" />
+        <TextView
+            android:id="@+id/tvadage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/tvadname"
+            app:layout_constraintTop_toBottomOf="@+id/tvadname" />
 
-    <Button
-        android:id="@+id/btnaddactorfav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginLeft="76dp"
-        android:layout_marginTop="24dp"
-        android:text="Add"
-        app:layout_constraintStart_toEndOf="@+id/ivactordetails"
-        app:layout_constraintTop_toBottomOf="@+id/tvadage" />
+        <Button
+            android:id="@+id/btnaddactorfav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:layout_marginLeft="76dp"
+            android:layout_marginTop="24dp"
+            android:text="Add"
+            app:layout_constraintStart_toEndOf="@+id/ivactordetails"
+            app:layout_constraintTop_toBottomOf="@+id/tvadage" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvactormovies"
+            android:layout_width="345dp"
+            android:layout_height="177dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/ivactordetails"
+            app:layout_constraintTop_toBottomOf="@+id/ivactordetails" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvactorseries"
+            android:layout_width="345dp"
+            android:layout_height="202dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="@+id/rvactormovies"
+            app:layout_constraintTop_toBottomOf="@+id/rvactormovies" />
+
+        <TextView
+            android:id="@+id/tvadbiography"
+            android:layout_width="341dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/rvactorseries"
+            app:layout_constraintTop_toBottomOf="@+id/rvactorseries" />
+
+        <TextView
+            android:id="@+id/tvadknownnames"
+            android:layout_width="342dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/tvadbiography"
+            app:layout_constraintTop_toBottomOf="@+id/tvadbiography"
+            tools:visibility="invisible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

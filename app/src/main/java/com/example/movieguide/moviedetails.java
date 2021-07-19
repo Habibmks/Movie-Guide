@@ -28,17 +28,21 @@ public class moviedetails extends AppCompatActivity {
     private RecyclerView.Adapter rAdapter;
     private RecyclerView.LayoutManager layoutManager;
     User user;
+    //if favbutton is true delete function runs
+    //else add function runs
+    Boolean favbutton;
 
     List<Actors> act;
     List<MovieSearchReturn> movies;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moviedetails);
         Intent intent = getIntent();
-        if (intent.hasExtra("movieid")){
-            movieid = intent.getStringExtra("movieid").toString();
-        }else{
+        if (intent.hasExtra("movieid")) {
+            movieid = intent.getStringExtra("movieid");
+        } else {
             //it's the Matrix
             movieid = "603";
         }
@@ -52,19 +56,21 @@ public class moviedetails extends AppCompatActivity {
         TextView tvoverview = findViewById(R.id.tvmovieoverview);
         Firestore firestore = new Firestore(userid);
         Button fav = findViewById(R.id.btnmoviefav);
-        firestore.checker("movies",movieid, new Firestore.itemcheck() {
-            @Override
-            public void onResponse(Boolean bool) {
-                fav.setText(bool ? "Remove":"Add");
-                fav.setVisibility(View.VISIBLE);
-            }
+        firestore.checker("movies", movieid, bool -> {
+            fav.setText(bool ? "Remove" : "Add");
+            favbutton = (bool ? true:false);
+            fav.setVisibility(View.VISIBLE);
         });
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firestore.addfav(movieid,"movies");
-                fav.setText(fav.getText().toString().equals("Add") ? "Remove":"Add");
+        fav.setOnClickListener(v -> {
+            if (favbutton) {
+                firestore.deletefav(movieid, "movies");
+                favbutton = false;
+            } else {
+                firestore.addfav(movieid, "movies");
+                favbutton = true;
             }
+            fav.setText(fav.getText().toString().equals("Add") ? "Remove" : "Add");
+
         });
         apifunc func = new apifunc();
         Runnable rvrunnable = new Runnable() {
@@ -75,6 +81,7 @@ public class moviedetails extends AppCompatActivity {
                     @Override
                     public void onError(String message) {
                     }
+
                     @Override
                     public void onResponse(List<Actors> actors) {
                         act = actors;
@@ -83,9 +90,9 @@ public class moviedetails extends AppCompatActivity {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(moviedetails.this);
                         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(linearLayoutManager);
-                        rAdapter = new ActorRVAdapter(act,moviedetails.this,userid);
+                        rAdapter = new ActorRVAdapter(act, moviedetails.this, userid);
                         recyclerView.setAdapter(rAdapter);
-                        }
+                    }
                 });
 
 
@@ -93,6 +100,7 @@ public class moviedetails extends AppCompatActivity {
                     @Override
                     public void onError(String message) {
                     }
+
                     @Override
                     public void onResponse(List<MovieSearchReturn> movieSearchReturns) {
                         movies = movieSearchReturns;
@@ -101,9 +109,9 @@ public class moviedetails extends AppCompatActivity {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(moviedetails.this);
                         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(linearLayoutManager);
-                        rAdapter = new SimilarRVAdapter(movies,moviedetails.this,user,userid);
+                        rAdapter = new SimilarRVAdapter(movies, moviedetails.this, user, userid);
                         recyclerView.setAdapter(rAdapter);
-                        }
+                    }
                 });
             }
 
@@ -111,7 +119,7 @@ public class moviedetails extends AppCompatActivity {
         Runnable detailsrunnable = new Runnable() {
             @Override
             public void run() {
-                func.getmoviedetails(movieid,moviedetails.this, new apifunc.moviedetailslistener() {
+                func.getmoviedetails(movieid, moviedetails.this, new apifunc.moviedetailslistener() {
                     @Override
                     public void onError(String message) {
 

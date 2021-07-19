@@ -13,57 +13,58 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.movieguide.MovieSearchReturn;
 import com.example.movieguide.R;
+import com.example.movieguide.Series;
+import com.example.movieguide.collections.Shows.Shows;
 import com.example.movieguide.collections.User.User;
-import com.example.movieguide.moviedetails;
 
+import java.lang.invoke.ConstantCallSite;
 import java.util.List;
 
-public class SimilarRVAdapter extends RecyclerView.Adapter<SimilarRVAdapter.ViewHolder> {
+public class SeriesRVAdapterHorizontal extends RecyclerView.Adapter<SeriesRVAdapterHorizontal.ViewHolder> {
 
-
-    List<MovieSearchReturn> movieSearchReturns;
+    List<Shows> shows;
     Context context;
     User user;
     String userid;
-    public SimilarRVAdapter(List<MovieSearchReturn> movieSearchReturns, Context context,User user,String userid) {
-        this.movieSearchReturns = movieSearchReturns;
+
+    public SeriesRVAdapterHorizontal(List<Shows> shows, Context context, User user, String userid) {
         this.context = context;
+        this.shows = shows;
         this.user = user;
         this.userid = userid;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.actorlayout, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvsimilar.setText(movieSearchReturns.get(position).getTitle());
-        Glide.with(this.context).load(movieSearchReturns.get(position).getPoster()).into(holder.ivsimilar);
+        holder.tvsimilar.setText(shows.get(position).getName());
+        Glide.with(this.context).load(shows.get(position).getPoster()).into(holder.ivsimilar);
         holder.layout.setOnClickListener(v -> {
-            Intent intent = new Intent(context, moviedetails.class);
-            intent.putExtra("movieid",String.valueOf(movieSearchReturns.get(position).getId()));
-            intent.putExtra("user",user);
-            intent.putExtra("userid",userid);
+            Intent intent = new Intent(context, Series.class);
+            intent.putExtra("userid", userid);
+            intent.putExtra("id", String.valueOf(shows.get(position).getId()));
             context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return movieSearchReturns.size();
+        return shows.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivsimilar;
         TextView tvsimilar;
         ConstraintLayout layout;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivsimilar = itemView.findViewById(R.id.ivsimple);

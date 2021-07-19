@@ -6,12 +6,12 @@
         android:title="Movies" />
     <item
         android:id="@+id/Actors"
-        android:title="Actors"/>
+        android:title="Actors" />
     <item
         android:id="@+id/Series"
-        android:title="Series"/>
+        android:title="Series" />
     <item
         android:id="@+id/Profile"
-        android:title="Profile"/>
+        android:title="Profile" />
 
 </menu>
