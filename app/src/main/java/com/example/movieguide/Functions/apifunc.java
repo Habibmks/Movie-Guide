@@ -38,6 +38,10 @@ public class apifunc {
         void onError(String message);
     }
 
+    public interface serieslistener{
+        void onResponse(Shows shows);
+        void onError(String message);
+    }
     public interface popactorlistener {
         void onResponse(List<Actors> list);
 
@@ -97,6 +101,13 @@ public class apifunc {
 
         void onResponse(showdetails showdetails);
     }
+
+    public interface actorlistener{
+        void onResponse(Actors actors);
+        void onError(String message);
+    }
+
+
 
     //searches movies by name
     public void moviesearch(String query, String page, Context context, moviesearchlistener listener) {
@@ -355,7 +366,7 @@ public class apifunc {
     }
 
 
-    //gets movies details by id
+    //gets movie list by id
     public void moviebyid(Context context, List<String> list, idmovielistener listener) throws InterruptedException {
         Log.d("idlistfunc", list.toString());
         List<MovieSearchReturn> rtn = new ArrayList<>();
@@ -398,6 +409,64 @@ public class apifunc {
             wait(200);
             Log.d("Time","200ms passed");
         }*/
+    }
+
+    //get actor list by id list
+    public void actorbyid(Context context, List<String> list, actorlistener listener){
+        for (int a=0;a<list.size();a++){
+            String url = "https://api.themoviedb.org/3/person/" + list.get(a) + key;
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url,null,response -> {
+                try {
+                    Actors actors = new Actors(
+                            response.getInt("id"),
+                            response.getString("name"),
+                            response.getString("profile_path"),
+                            response.getInt("gender"),
+                            Float.parseFloat(response.getString("popularity"))
+                    );
+                    listener.onResponse(actors);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            },error -> {
+
+            });
+            Singleton.getInstance(context).addToRequestQueue(request);
+        }
+    }
+
+    //get series list by id list
+    public void  seriesid(Context context,List<String> list, serieslistener listener){
+        for(int i = 0;i<list.size();i++){
+            String url = "https://api.themoviedb.org/3/tv/" + list.get(i) + key;
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url,null,response -> {
+                try {
+                    JSONArray array = response.getJSONArray("genres");
+                    String[] genres = new String[array.length()];
+                    for (int a=0;a<array.length();a++){
+                        JSONObject object = array.getJSONObject(a);
+                        genres[a] = object.getString("id");
+                    }
+                    Shows shows = new Shows(
+                            response.getInt("id"),
+                            array.length(),
+                            genres,
+                            response.getString("name"),
+                            response.getString("overview"),
+                            response.getString("poster_path"),
+                            response.getString("original_name"),
+                            response.getString("first_air_date")
+                    );
+                    listener.onResponse(shows);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    listener.onError(e.getMessage());
+                }
+            },error -> {
+                listener.onError(error.getMessage());
+            });
+            Singleton.getInstance(context).addToRequestQueue(request);
+        }
     }
 
 

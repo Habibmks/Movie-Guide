@@ -14,10 +14,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.movieguide.Firebase.Firestore;
 import com.example.movieguide.Functions.apifunc;
-import com.example.movieguide.collections.ActorRVAdapter;
+import com.example.movieguide.collections.RvAdapter.ActorRVAdapter;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.Movies.MovieDetails;
-import com.example.movieguide.collections.SimilarRVAdapter;
+import com.example.movieguide.collections.RvAdapter.SimilarRVAdapter;
 import com.example.movieguide.collections.User.User;
 
 import java.util.List;

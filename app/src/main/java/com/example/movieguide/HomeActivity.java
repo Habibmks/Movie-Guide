@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import com.example.movieguide.Firebase.Firestore;
 import com.example.movieguide.Functions.apifunc;
+import com.example.movieguide.collections.Actors.Actors;
+import com.example.movieguide.collections.RvAdapter.ActorRVAdapterVerical;
+import com.example.movieguide.collections.RvAdapter.SeriesRVAdapter;
+import com.example.movieguide.collections.Shows.Shows;
 import com.example.movieguide.collections.User.User;
 
 import java.util.ArrayList;
@@ -21,6 +25,10 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView.Adapter rAdapter;
     private RecyclerView.LayoutManager layoutManager;
     static List<String> idlist;
+    User user;
+    Firestore firestore;
+    String userid,title,type;
+    TextView tvtitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +37,22 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
         Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        String userid = intent.getStringExtra("userid");
-        User user = (User) intent.getSerializableExtra("user");
-        Firestore firestore = new Firestore(userid);
-        apifunc apifunc = new apifunc();
-        TextView tvtitle = findViewById(R.id.tvfavorites);
+        title = intent.getStringExtra("title");
+        userid = intent.getStringExtra("userid");
+        type = intent.getStringExtra("type");
+        user = (User) intent.getSerializableExtra("user");
+        firestore = new Firestore(userid);
+        tvtitle = findViewById(R.id.tvfavorites);
         tvtitle.setText(title);
         idlist = new ArrayList<>();
-        
-        firestore.listgetter("Favorites", "movies", new Firestore.getlist() {
+        Log.d("HomeActivity",type);
+        firestore.listgetter("Favorites", type, new Firestore.getlist() {
             @Override
             public void onResponse(ArrayList<String> list) {
                 if (!list.isEmpty()){
+                    Log.d("Profilelistgetter",list.toString());
                     idlist = list;
                     setlist(user,userid);
                 }
@@ -63,23 +73,59 @@ public class HomeActivity extends AppCompatActivity {
     }
     public void setlist(User user,String userid){
         apifunc apifunc = new apifunc();
-        List<MovieSearchReturn> movieSearchReturnList = new ArrayList<>();
+        Log.d("setlist","before try catch");
         try {
-            apifunc.moviebyid(HomeActivity.this, idlist, new apifunc.idmovielistener() {
-                @Override
-                public void onError(String message) {
+            if(type.equals("movies")) {
+                List<MovieSearchReturn> movieSearchReturnList = new ArrayList<>();
+                apifunc.moviebyid(HomeActivity.this, idlist, new apifunc.idmovielistener() {
+                    @Override
+                    public void onError(String message) {
 
-                }
+                    }
 
-                @Override
-                public void onResponse(MovieSearchReturn movieSearchReturn) {
-                    movieSearchReturnList.add(movieSearchReturn);
-                    rAdapter = new RecyclerViewAdapter(movieSearchReturnList,HomeActivity.this,user,userid);
-                    recyclerView.setAdapter(rAdapter);
-                }
-            });
+                    @Override
+                    public void onResponse(MovieSearchReturn movieSearchReturn) {
+                        movieSearchReturnList.add(movieSearchReturn);
+                        Log.d("setlistmovies",movieSearchReturnList.toString());
+                        rAdapter = new RecyclerViewAdapter(movieSearchReturnList, HomeActivity.this, user, userid);
+                        recyclerView.setAdapter(rAdapter);
+                    }
+                });
+            }else if(type.equals("series")){
+                List<Shows> showsList = new ArrayList<>();
+                apifunc.seriesid(HomeActivity.this, idlist, new apifunc.serieslistener() {
+                    @Override
+                    public void onResponse(Shows shows) {
+                        showsList.add(shows);
+                        Log.d("setlistseries",showsList.toString());
+                        rAdapter = new SeriesRVAdapter(HomeActivity.this,showsList,userid);
+                        recyclerView.setAdapter(rAdapter);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+            }else if(type.equals("actors")){
+                List<Actors> actorsList = new ArrayList<>();
+                apifunc.actorbyid(HomeActivity.this, idlist, new apifunc.actorlistener() {
+                    @Override
+                    public void onResponse(Actors actors) {
+                        actorsList.add(actors);
+                        rAdapter = new ActorRVAdapterVerical(actorsList,HomeActivity.this,userid,user);
+                        recyclerView.setAdapter(rAdapter);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.d("SetList",e.getMessage());
         }
     }
 /*

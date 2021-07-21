@@ -1,4 +1,4 @@
-package com.example.movieguide.collections;
+package com.example.movieguide.collections.RvAdapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,60 +16,56 @@ import com.bumptech.glide.Glide;
 import com.example.movieguide.R;
 import com.example.movieguide.Series;
 import com.example.movieguide.collections.Shows.Shows;
-import com.example.movieguide.collections.User.User;
 
-import java.lang.invoke.ConstantCallSite;
 import java.util.List;
 
-public class SeriesRVAdapterHorizontal extends RecyclerView.Adapter<SeriesRVAdapterHorizontal.ViewHolder> {
+public class SeriesRVAdapter extends RecyclerView.Adapter<SeriesRVAdapter.ViewHolder> {
 
-    List<Shows> shows;
+    List<Shows> showlist;
     Context context;
-    User user;
     String userid;
 
-    public SeriesRVAdapterHorizontal(List<Shows> shows, Context context, User user, String userid) {
+    public SeriesRVAdapter(Context context,List<Shows> showlist,String userid){
         this.context = context;
-        this.shows = shows;
-        this.user = user;
+        this.showlist = showlist;
         this.userid = userid;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.actorlayout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_item_layout,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvsimilar.setText(shows.get(position).getName());
-        Glide.with(this.context).load(shows.get(position).getPoster()).into(holder.ivsimilar);
+        holder.tvname.setText(showlist.get(position).getName());
+        holder.tvdate.setText(showlist.get(position).getDate());
+        Glide.with(this.context).load(showlist.get(position).getPoster()).into(holder.iv);
         holder.layout.setOnClickListener(v -> {
             Intent intent = new Intent(context, Series.class);
-            intent.putExtra("userid", userid);
-            intent.putExtra("id", String.valueOf(shows.get(position).getId()));
+            intent.putExtra("userid",userid);
+            intent.putExtra("id",String.valueOf(showlist.get(position).getId()));
             context.startActivity(intent);
         });
     }
 
+
     @Override
     public int getItemCount() {
-        return shows.size();
+        return showlist.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivsimilar;
-        TextView tvsimilar;
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        ImageView iv;
+        TextView tvname,tvdate;
         ConstraintLayout layout;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivsimilar = itemView.findViewById(R.id.ivsimple);
-            tvsimilar = itemView.findViewById(R.id.tvsimple);
-            layout = itemView.findViewById(R.id.actorlayout);
+            iv = itemView.findViewById(R.id.iv_poster);
+            tvname = itemView.findViewById(R.id.tv_title);
+            tvdate = itemView.findViewById(R.id.tv_date);
+            layout = itemView.findViewById(R.id.oneitemlayout);
         }
     }
 }

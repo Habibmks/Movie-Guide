@@ -15,7 +15,7 @@ import android.widget.EditText;
 
 import com.example.movieguide.R;
 import com.example.movieguide.Functions.apifunc;
-import com.example.movieguide.collections.ActorRVAdapterVerical;
+import com.example.movieguide.collections.RvAdapter.ActorRVAdapterVerical;
 import com.example.movieguide.collections.Actors.Actors;
 import com.example.movieguide.collections.User.User;
 

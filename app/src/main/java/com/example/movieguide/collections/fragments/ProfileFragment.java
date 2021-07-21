@@ -56,10 +56,9 @@ public class ProfileFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
             getActivity().finish();
         });
-        btnfavmov.setOnClickListener(v1 -> {
-            favmovie();
-
-        });
+        btnfavmov.setOnClickListener(v1 -> tofav("movies","Movies"));
+        btnfavser.setOnClickListener(v14 -> tofav("series","Series"));
+        btnfavact.setOnClickListener(v15 -> tofav("actors","Actors"));
         btnprofile.setOnClickListener(v13 -> profile());
 
         return v;
@@ -68,11 +67,13 @@ public class ProfileFragment extends Fragment {
     public void logout(){
 
     }
-    public void favmovie(){
+
+    public void tofav(String type,String title){
         Intent intent = new Intent(context, HomeActivity.class);
-        intent.putExtra("title","Movies");
+        intent.putExtra("title",title);
         intent.putExtra("userid",userid);
         intent.putExtra("user",user);
+        intent.putExtra("type",type);
         startActivity(intent);
     }
     public void profile(){
